@@ -17,9 +17,13 @@ import { authClient } from "@typefolio/core/auth/client";
 export function SignUpForm({
   redirectUri,
   showVerifyNotice,
+  defaultEmail = "",
+  defaultName = "",
 }: {
   redirectUri?: string;
   showVerifyNotice?: boolean;
+  defaultEmail?: string;
+  defaultName?: string;
 }) {
   const [state, formAction, isPending] = useActionState(signUpWithEmail, null);
 
@@ -51,7 +55,15 @@ export function SignUpForm({
           <label htmlFor="name" style={fieldLabel}>
             Name
           </label>
-          <input id="name" name="name" type="text" autoComplete="name" required style={fieldInput} />
+          <input
+            id="name"
+            name="name"
+            type="text"
+            autoComplete="name"
+            required
+            defaultValue={defaultName}
+            style={fieldInput}
+          />
         </div>
         <div>
           <label htmlFor="email" style={fieldLabel}>
@@ -63,6 +75,7 @@ export function SignUpForm({
             type="email"
             autoComplete="email"
             required
+            defaultValue={defaultEmail}
             style={fieldInput}
           />
         </div>

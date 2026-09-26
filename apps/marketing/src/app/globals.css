@@ -1,0 +1,46 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --color-paper: #fff;
+  --color-ink: #000;
+  --color-ink-soft: #404040;
+  --color-line: #000;
+  --color-panel: #000;
+  --color-panel-text: #fff;
+  --color-panel-muted: #c8c8c8;
+  --color-field: #000;
+  --color-field-line: #fff;
+  --color-cream: #fff;
+  --color-danger: #000;
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+
+  body {
+    margin: 0;
+    background: #fff;
+    color: #000;
+    font-family: var(--font-sans);
+  }
+
+  ::selection {
+    background: #000;
+    color: #fff;
+  }
+}
+
+.auth-field:-webkit-autofill {
+  -webkit-text-fill-color: #fff;
+  box-shadow: 0 0 0 1000px #000 inset;
+  caret-color: #fff;
+}
+
+#sign-up ::selection {
+  background: #fff;
+  color: #000;
+}
