@@ -121,7 +121,7 @@ export function SignUpPanel({
           </p>
           <p className="mt-3 text-sm leading-relaxed text-panel-muted">
             {plan === "pro"
-              ? "After that, you can start the 2-week trial of Pro sync at the £20/year launch price, locked in for early users."
+              ? "After that, start the 2-week trial. Founding price is £20/year, locked in forever. Later, new customers pay £40/year."
               : "After that, your library is there to browse on the web. Device sync is the Pro bit."}
           </p>
           <a
@@ -138,7 +138,7 @@ export function SignUpPanel({
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-panel-muted">
             {plan === "pro"
-              ? "Pro includes a 2-week trial of sync, then £20/year locked in for early users."
+              ? "Founding price: £20/year, locked in forever. Later, new customers pay £40/year. Includes a 2-week trial of sync."
               : plan === "free"
                 ? "Free keeps your library in the cloud and lets you browse it on the web. No device sync."
                 : "Same account either way. Free is the library. Pro adds sync."}

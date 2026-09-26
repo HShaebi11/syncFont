@@ -12,7 +12,7 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Typefolio — Your fonts, on every device",
   description:
-    "Early access. Keep your font library in the cloud and browse it on the web. Pro syncs it to your Mac — £20/year for early users, with a 2-week trial.",
+    "Early access. Keep your font library in the cloud and browse it on the web. Pro syncs it to your Mac — founding price £20/year, locked in forever, then £40/year.",
 };
 
 export default function MarketingLayout({

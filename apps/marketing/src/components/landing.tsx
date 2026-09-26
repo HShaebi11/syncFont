@@ -71,9 +71,10 @@ export function Landing({
                   pressed={plan === "pro"}
                   name="Pro"
                   price="£20/year"
+                  detail="locked in forever"
                   onChoose={() => choosePlan("pro")}
                 >
-                  Sync to your Mac. £20/year launch, locked in, then £40. 2-week trial.
+                  Founding price for people who join now. Later, new customers pay £40/year. Sync to your Mac, with a 2-week trial.
                 </PlanChoice>
               </div>
             </fieldset>
