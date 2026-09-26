@@ -5,6 +5,9 @@ const apiOrigin = process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "");
 const nextConfig: NextConfig = {
   allowedDevOrigins: ["127.0.0.1"],
   transpilePackages: ["@typefolio/core"],
+  devIndicators: {
+    position: "bottom-right",
+  },
   async rewrites() {
     if (!apiOrigin) {
       return [];

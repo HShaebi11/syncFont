@@ -3,18 +3,7 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import {
-  FolderIcon,
-  HeartIcon,
-  HomeIcon,
-  MonitorIcon,
-  RefreshCwIcon,
-  SearchIcon,
-  SettingsIcon,
-  Share2Icon,
-  SmartphoneIcon,
-  TabletIcon,
-} from "lucide-react";
+import { FolderIcon, HeartIcon, HomeIcon, RefreshCwIcon, SearchIcon } from "lucide-react";
 
 import { LibraryProvider, useLibrary } from "@/components/library/library-provider";
 import { SearchOverlay } from "@/components/search/search-overlay";
@@ -32,123 +21,31 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { OfflineBanner } from "@/components/ui/feedback";
-import { Separator } from "@/components/ui/separator";
-import {
-  Sidebar,
-  SidebarContent,
-  SidebarFooter,
-  SidebarGroup,
-  SidebarGroupContent,
-  SidebarGroupLabel,
-  SidebarHeader,
-  SidebarInset,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarProvider,
-  SidebarTrigger,
-} from "@/components/ui/sidebar";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { relativeTime } from "@/lib/format";
 
-function deviceIcon(platform: string) {
-  if (platform === "ios") return SmartphoneIcon;
-  if (platform === "macos") return TabletIcon;
-  return MonitorIcon;
-}
+const HEADER_LINKS = [
+  { href: "/fonts", label: "Fonts", match: (pathname: string) => pathname === "/fonts" || pathname.startsWith("/fonts/") },
+  { href: "/favorites", label: "Favorites", match: (pathname: string) => pathname.startsWith("/favorites") },
+  { href: "/collections", label: "Collections", match: (pathname: string) => pathname.startsWith("/collections") },
+  { href: "/devices", label: "Devices", match: (pathname: string) => pathname.startsWith("/devices") },
+] as const;
 
-function AppSidebar() {
-  const pathname = usePathname();
-  const { devices } = useLibrary();
+function SyncStatus({ latestSync }: { latestSync?: string }) {
+  const [label, setLabel] = useState("Sync");
 
-  const libraryItems = [
-    { href: "/fonts", label: "All fonts", icon: FolderIcon },
-    { href: "/favorites", label: "Favorites", icon: HeartIcon },
-    { href: "/recent", label: "Recently added", icon: RefreshCwIcon },
-    { href: "/shared", label: "Shared", icon: Share2Icon },
-    { href: "/collections", label: "Collections", icon: FolderIcon },
-  ];
+  useEffect(() => {
+    setLabel(latestSync ? `Synced ${relativeTime(latestSync)}` : "Sync");
+  }, [latestSync]);
 
   return (
-    <Sidebar>
-      <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton size="lg" asChild>
-              <Link href="/">
-                <span className="font-semibold">Typefolio</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarHeader>
-      <SidebarContent>
-        <SidebarGroup>
-          <SidebarGroupLabel>Library</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {libraryItems.map((item) => (
-                <SidebarMenuItem key={item.href}>
-                  <SidebarMenuButton
-                    asChild
-                    isActive={pathname === item.href || pathname.startsWith(`${item.href}/`)}
-                  >
-                    <Link href={item.href}>
-                      <item.icon />
-                      <span>{item.label}</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ))}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-        <SidebarGroup>
-          <SidebarGroupLabel>Devices</SidebarGroupLabel>
-          <SidebarGroupContent>
-            <SidebarMenu>
-              {devices.length === 0 ? (
-                <SidebarMenuItem>
-                  <SidebarMenuButton asChild>
-                    <Link href="/devices">
-                      <MonitorIcon />
-                      <span>No devices yet</span>
-                    </Link>
-                  </SidebarMenuButton>
-                </SidebarMenuItem>
-              ) : (
-                devices.map((device) => {
-                  const Icon = deviceIcon(device.platform);
-                  return (
-                    <SidebarMenuItem key={device.id}>
-                      <SidebarMenuButton asChild>
-                        <Link href="/devices">
-                          <Icon />
-                          <span>{device.name}</span>
-                        </Link>
-                      </SidebarMenuButton>
-                    </SidebarMenuItem>
-                  );
-                })
-              )}
-            </SidebarMenu>
-          </SidebarGroupContent>
-        </SidebarGroup>
-      </SidebarContent>
-      <SidebarFooter>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild isActive={pathname.startsWith("/settings")}>
-              <Link href="/settings">
-                <SettingsIcon />
-                <span>Settings</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
-      </SidebarFooter>
-    </Sidebar>
+    <Link
+      href="/devices"
+      className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "hidden md:inline-flex")}
+    >
+      <Badge variant="outline">{label}</Badge>
+    </Link>
   );
 }
 
@@ -195,6 +92,7 @@ function MobileNav({ onSearch }: { onSearch: () => void }) {
 
 function ShellInner({ children }: { children: React.ReactNode }) {
   const [searchOpen, setSearchOpen] = useState(false);
+  const pathname = usePathname();
   const router = useRouter();
   const { offline, devices } = useLibrary();
   const latestSync = devices
@@ -232,83 +130,93 @@ function ShellInner({ children }: { children: React.ReactNode }) {
   }, [router]);
 
   return (
-    <SidebarProvider>
-      <AppSidebar />
-      <SidebarInset>
-        <header className="sticky top-0 z-10 flex h-14 items-center gap-2 border-b bg-background px-4">
-          <SidebarTrigger />
-          <Separator orientation="vertical" className="mr-1 h-4" />
+    <div className="flex min-h-svh flex-col">
+      <header className="sticky top-0 z-30 flex h-14 items-center gap-3 border-b bg-background px-4">
+        <Link href="/" className="text-sm font-semibold tracking-tight">
+          Typefolio
+        </Link>
+        <nav className="hidden items-center gap-1 lg:flex">
+          {HEADER_LINKS.map((item) => {
+            const active = item.match(pathname);
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                className={cn(
+                  "rounded-md px-2.5 py-1 text-sm",
+                  active
+                    ? "font-medium text-foreground"
+                    : "text-muted-foreground hover:text-foreground",
+                )}
+              >
+                {item.label}
+              </Link>
+            );
+          })}
+        </nav>
+        <Button
+          variant="outline"
+          className="hidden w-full max-w-sm justify-start text-muted-foreground md:inline-flex"
+          onClick={() => setSearchOpen(true)}
+        >
+          <SearchIcon />
+          Search fonts, collections...
+          <kbd className="ml-auto text-xs">⌘K</kbd>
+        </Button>
+        <div className="ml-auto flex items-center gap-2">
+          <SyncStatus latestSync={latestSync} />
           <Button
-            variant="outline"
-            className="hidden w-full max-w-sm justify-start text-muted-foreground md:inline-flex"
+            variant="ghost"
+            size="icon"
+            className="md:hidden"
+            aria-label="Search"
             onClick={() => setSearchOpen(true)}
           >
             <SearchIcon />
-            Search fonts, collections...
-            <kbd className="ml-auto text-xs">⌘K</kbd>
           </Button>
-          <div className="ml-auto flex items-center gap-2">
-            <Link
-              href="/devices"
-              className={cn(buttonVariants({ variant: "ghost", size: "sm" }), "hidden md:inline-flex")}
-            >
-              <Badge variant="outline">
-                {latestSync ? `Synced ${relativeTime(latestSync)}` : "Sync"}
-              </Badge>
-            </Link>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="md:hidden"
-              aria-label="Search"
-              onClick={() => setSearchOpen(true)}
-            >
-              <SearchIcon />
-            </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" aria-label="Account">
-                  <Avatar className="size-7">
-                    <AvatarFallback>TF</AvatarFallback>
-                  </Avatar>
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuLabel>Account</DropdownMenuLabel>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem onClick={() => router.push("/settings")}>
-                  Settings
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => router.push("/devices")}>
-                  Devices
-                </DropdownMenuItem>
-                <DropdownMenuSeparator />
-                <DropdownMenuItem
-                  onClick={() =>
-                    authClient.signOut({
-                      fetchOptions: {
-                        onSuccess: () => {
-                          window.location.href = "/auth/sign-in";
-                        },
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon" aria-label="Account">
+                <Avatar className="size-7">
+                  <AvatarFallback>TF</AvatarFallback>
+                </Avatar>
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuLabel>Account</DropdownMenuLabel>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem onClick={() => router.push("/settings")}>
+                Settings
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={() => router.push("/devices")}>
+                Devices
+              </DropdownMenuItem>
+              <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() =>
+                  authClient.signOut({
+                    fetchOptions: {
+                      onSuccess: () => {
+                        window.location.href = "/auth/sign-in";
                       },
-                    })
-                  }
-                >
-                  Sign out
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div>
-        </header>
-        {offline ? <OfflineBanner /> : null}
-        <div className="flex-1 px-4 pb-24 pt-6 lg:px-8 lg:pb-10">
-          <div className="mx-auto w-full max-w-6xl">{children}</div>
+                    },
+                  })
+                }
+              >
+                Sign out
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
-        <MobileNav onSearch={() => setSearchOpen(true)} />
-        <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
-        <Toaster />
-      </SidebarInset>
-    </SidebarProvider>
+      </header>
+      {offline ? <OfflineBanner /> : null}
+      <div className="flex-1 px-4 pb-24 pt-6 lg:px-8 lg:pb-10">
+        <div className="mx-auto w-full max-w-6xl">{children}</div>
+      </div>
+      <MobileNav onSearch={() => setSearchOpen(true)} />
+      <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
+      <Toaster />
+    </div>
   );
 }
 
