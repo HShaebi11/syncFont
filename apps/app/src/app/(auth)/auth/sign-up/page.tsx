@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState } from "react";
+import { Suspense, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 import { AuthCard } from "@/components/auth/auth-card";
 import { Alert, AlertDescription } from "@/components/ui/alert";
@@ -10,15 +11,39 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { authClient } from "@/lib/auth-client";
 
-export default function SignUpPage() {
-  const [email, setEmail] = useState("");
+function prefillText(value: string | null, maxLength: number): string {
+  if (!value) {
+    return "";
+  }
+  const trimmed = value.trim().slice(0, maxLength);
+  if (!trimmed || /[\u0000-\u001F\u007F]/.test(trimmed)) {
+    return "";
+  }
+  return trimmed;
+}
+
+function prefillEmail(value: string | null): string {
+  const text = prefillText(value, 254);
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(text) ? text : "";
+}
+
+function SignUpForm() {
+  const params = useSearchParams();
+  const [email, setEmail] = useState(() => prefillEmail(params.get("email")));
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const [name, setName] = useState(() => prefillText(params.get("name"), 80));
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const proIntent = params.get("plan") === "pro";
 
   return (
     <AuthCard title="Create account">
+      {proIntent ? (
+        <p className="text-sm text-muted-foreground">
+          After you verify your email, you can start the 2-week Pro trial. Launch price is £20/year,
+          locked in for early users.
+        </p>
+      ) : null}
       <form
         className="space-y-4"
         onSubmit={async (event) => {
@@ -76,5 +101,13 @@ export default function SignUpPage() {
         </Link>
       </p>
     </AuthCard>
+  );
+}
+
+export default function SignUpPage() {
+  return (
+    <Suspense fallback={<p className="mx-auto max-w-md px-6 py-16 text-sm text-muted-foreground">Loading…</p>}>
+      <SignUpForm />
+    </Suspense>
   );
 }

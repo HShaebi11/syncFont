@@ -1,0 +1,35 @@
+@import "tailwindcss";
+
+@theme inline {
+  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
+  --font-serif: var(--font-newsreader), "Iowan Old Style", Palatino, Georgia, serif;
+  --color-paper: #f4f1ea;
+  --color-ink: #1c1916;
+  --color-ink-soft: #4f493f;
+  --color-line: #e0d8cc;
+  --color-panel: #1c1916;
+  --color-panel-text: #f7f4ee;
+  --color-panel-muted: #d4cdc2;
+  --color-field: #2a2622;
+  --color-field-line: #514b43;
+  --color-cream: #f4f1ea;
+  --color-danger: #fecaca;
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+
+  body {
+    margin: 0;
+    background: var(--color-paper);
+    color: var(--color-ink);
+  }
+}
+
+.auth-field:-webkit-autofill {
+  -webkit-text-fill-color: #f7f4ee;
+  box-shadow: 0 0 0 1000px #2a2622 inset;
+  caret-color: #f7f4ee;
+}
