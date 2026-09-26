@@ -48,44 +48,35 @@ export function Landing({
               Your fonts, on every device.
             </h1>
             <p className="mt-4 max-w-lg text-base leading-relaxed text-ink-soft text-pretty">
-              The fonts you already own, kept together. Save your library in the cloud, browse it on
-              the web, and sync it to your Mac when you want those files on the machine you design with.
+              Keep the fonts you already own in one library — in the cloud, on the web, and on your
+              Mac. The Mac app is Electron for now.
             </p>
             <p className="mt-3 max-w-lg text-sm leading-relaxed text-ink-soft text-pretty">
-              We’re in early access, and Mac comes first. The app is Electron for now, with a native
-              version later. This isn’t an App Store download yet.
+              Early access is honest work in progress. The happy path works; some edges are still
+              rough. If you try it now, you’re helping us sand them down.
             </p>
 
             <fieldset className="mt-6">
-              <legend className="text-xs font-medium tracking-[0.14em] text-ink-soft uppercase">
-                Two ways in
-              </legend>
-              <div className="mt-3 grid gap-3">
+              <legend className="sr-only">Plans</legend>
+              <div className="grid gap-3">
                 <PlanChoice
                   pressed={plan === "free"}
                   name="Free"
                   price="£0"
                   onChoose={() => choosePlan("free")}
                 >
-                  Save and keep your font library in the cloud. Browse it on the web. No device sync.
+                  Save your fonts in the cloud. Browse on the web. No sync.
                 </PlanChoice>
                 <PlanChoice
                   pressed={plan === "pro"}
                   name="Pro"
                   price="£20/year"
-                  detail="then £40/year"
                   onChoose={() => choosePlan("pro")}
                 >
-                  The same library, plus sync to your Mac. £20/year is the launch price, locked in for
-                  early users. Includes a 2-week free trial of Pro sync.
+                  Sync to your Mac. £20/year launch, locked in, then £40. 2-week trial.
                 </PlanChoice>
               </div>
             </fieldset>
-
-            <p className="mt-4 max-w-lg text-sm leading-relaxed text-ink-soft text-pretty">
-              Early access is honest work in progress. The happy path works; some edges are still
-              rough. If you try it now, you’re helping us sand them down.
-            </p>
           </div>
         </div>
       </section>
