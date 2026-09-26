@@ -1,19 +1,19 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-sans: var(--font-geist), ui-sans-serif, system-ui, sans-serif;
-  --font-serif: var(--font-newsreader), "Iowan Old Style", Palatino, Georgia, serif;
-  --color-paper: #f4f1ea;
-  --color-ink: #1c1916;
-  --color-ink-soft: #4f493f;
-  --color-line: #e0d8cc;
-  --color-panel: #1c1916;
-  --color-panel-text: #f7f4ee;
-  --color-panel-muted: #d4cdc2;
-  --color-field: #2a2622;
-  --color-field-line: #514b43;
-  --color-cream: #f4f1ea;
-  --color-danger: #fecaca;
+  --font-sans: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --font-mono: var(--font-geist-mono), ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  --color-paper: #fff;
+  --color-ink: #000;
+  --color-ink-soft: #404040;
+  --color-line: #000;
+  --color-panel: #000;
+  --color-panel-text: #fff;
+  --color-panel-muted: #c8c8c8;
+  --color-field: #000;
+  --color-field-line: #fff;
+  --color-cream: #fff;
+  --color-danger: #000;
 }
 
 @layer base {
@@ -23,13 +23,24 @@
 
   body {
     margin: 0;
-    background: var(--color-paper);
-    color: var(--color-ink);
+    background: #fff;
+    color: #000;
+    font-family: var(--font-sans);
+  }
+
+  ::selection {
+    background: #000;
+    color: #fff;
   }
 }
 
 .auth-field:-webkit-autofill {
-  -webkit-text-fill-color: #f7f4ee;
-  box-shadow: 0 0 0 1000px #2a2622 inset;
-  caret-color: #f7f4ee;
+  -webkit-text-fill-color: #fff;
+  box-shadow: 0 0 0 1000px #000 inset;
+  caret-color: #fff;
+}
+
+#sign-up ::selection {
+  background: #fff;
+  color: #000;
 }

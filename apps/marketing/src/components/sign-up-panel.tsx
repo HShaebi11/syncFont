@@ -14,7 +14,7 @@ import {
 type Step = "email" | "account" | "verify";
 
 const fieldClass =
-  "auth-field mt-2 w-full rounded-lg border border-field-line bg-field px-3 py-2.5 text-base text-panel-text outline-none placeholder:text-[#c9c2b6] focus-visible:border-cream focus-visible:ring-2 focus-visible:ring-cream/70";
+  "auth-field mt-2 w-full border border-field-line bg-field px-3 py-2.5 text-base text-panel-text outline-none placeholder:text-panel-muted focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cream";
 
 export function SignUpPanel({
   apiBase,
@@ -111,7 +111,7 @@ export function SignUpPanel({
           <h2
             ref={verifyHeadingRef}
             tabIndex={-1}
-            className="font-serif text-4xl tracking-tight text-panel-text outline-none"
+            className="text-4xl tracking-tight text-panel-text outline-none"
           >
             Check your email
           </h2>
@@ -126,14 +126,14 @@ export function SignUpPanel({
           </p>
           <a
             href={signInHref}
-            className="mt-8 inline-flex rounded-full bg-cream px-5 py-2.5 text-sm font-medium text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cream"
+            className="mt-8 inline-flex bg-cream px-5 py-2.5 text-sm font-medium text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cream"
           >
             {signInLabel}
           </a>
         </div>
       ) : (
         <>
-          <h2 className="mt-8 font-serif text-4xl tracking-tight text-panel-text">
+          <h2 className="mt-8 text-4xl tracking-tight text-panel-text">
             {step === "account" ? "Create your account" : "Start with your email"}
           </h2>
           <p className="mt-3 text-sm leading-relaxed text-panel-muted">
@@ -170,7 +170,7 @@ export function SignUpPanel({
               <FormError id={errorId} message={error} />
               <button
                 type="submit"
-                className="mt-6 inline-flex w-full justify-center rounded-full bg-cream px-5 py-2.5 text-sm font-medium text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cream"
+                className="mt-6 inline-flex w-full justify-center bg-cream px-5 py-2.5 text-sm font-medium text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cream"
               >
                 Continue
               </button>
@@ -254,7 +254,7 @@ export function SignUpPanel({
               <button
                 type="submit"
                 disabled={pending}
-                className="mt-6 inline-flex w-full justify-center rounded-full bg-cream px-5 py-2.5 text-sm font-medium text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cream disabled:cursor-wait disabled:opacity-70"
+                className="mt-6 inline-flex w-full justify-center bg-cream px-5 py-2.5 text-sm font-medium text-ink focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-cream disabled:cursor-wait disabled:opacity-70"
               >
                 {pending ? "Creating account…" : "Create account"}
               </button>
@@ -301,7 +301,7 @@ function FormError({ id, message }: { id: string; message: string | null }) {
   }
 
   return (
-    <p id={id} role="alert" className="mt-3 text-sm text-danger">
+    <p id={id} role="alert" className="mt-3 border border-cream bg-cream px-3 py-2 text-sm text-ink">
       {message}
     </p>
   );

@@ -35,7 +35,7 @@ export function Landing({
             {checkoutSuccess ? (
               <p
                 role="status"
-                className="mb-6 rounded-2xl border border-line bg-white px-4 py-3 text-sm leading-relaxed text-ink-soft"
+                className="mb-6 border border-ink bg-paper px-4 py-3 text-sm leading-relaxed text-ink-soft"
               >
                 If checkout completed, Pro will show on your account once payment finishes.
                 Sign in when you’re ready.
@@ -44,8 +44,8 @@ export function Landing({
 
             <p className="text-xs font-medium tracking-[0.18em] text-ink-soft uppercase">Typefolio</p>
             <p className="mt-3 text-sm text-ink-soft">Early access · Mac first</p>
-            <h1 className="mt-3 font-serif text-[clamp(2.55rem,4vw,3.9rem)] leading-[0.96] tracking-[-0.03em] text-balance">
-              Your fonts, <span className="italic">on every device.</span>
+            <h1 className="mt-3 text-[clamp(2.55rem,4vw,3.9rem)] leading-[0.96] tracking-[-0.03em] text-balance">
+              Your fonts, on every device.
             </h1>
             <p className="mt-4 max-w-lg text-base leading-relaxed text-ink-soft text-pretty">
               The fonts you already own, kept together. Save your library in the cloud, browse it on
@@ -122,19 +122,19 @@ function PlanChoice({
       type="button"
       aria-pressed={pressed}
       onClick={onChoose}
-      className={`rounded-2xl border px-4 py-3 text-left transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink ${
-        pressed ? "border-ink bg-white" : "border-line bg-paper hover:bg-white"
+      className={`border px-4 py-3 text-left transition-colors focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ink ${
+        pressed ? "border-ink bg-ink text-paper" : "border-ink bg-paper text-ink hover:bg-neutral-100"
       }`}
     >
       <span className="flex items-baseline justify-between gap-4">
         <span className="text-base font-medium">{name}</span>
         <span className="text-right">
           <span className="block text-sm font-medium">{price}</span>
-          {detail ? <span className="block text-xs text-ink-soft">{detail}</span> : null}
+          {detail ? <span className="block text-xs opacity-70">{detail}</span> : null}
         </span>
       </span>
-      <span className="mt-1.5 block text-sm leading-relaxed text-ink-soft">{children}</span>
-      <span className="mt-3 block text-sm font-medium underline decoration-ink/30 underline-offset-4">
+      <span className="mt-1.5 block text-sm leading-relaxed opacity-80">{children}</span>
+      <span className="mt-3 block text-sm font-medium underline decoration-current/40 underline-offset-4">
         {name === "Pro" ? "Start the 2-week trial" : "Try it free"}
       </span>
     </button>

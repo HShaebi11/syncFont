@@ -1,19 +1,12 @@
 import type { Metadata } from "next";
-import { Geist, Newsreader } from "next/font/google";
+import { Geist_Mono } from "next/font/google";
 
 import "./globals.css";
 
-const geist = Geist({
+const geistMono = Geist_Mono({
   subsets: ["latin"],
   display: "swap",
-  variable: "--font-geist",
-});
-
-const newsreader = Newsreader({
-  subsets: ["latin"],
-  display: "swap",
-  style: ["normal", "italic"],
-  variable: "--font-newsreader",
+  variable: "--font-geist-mono",
 });
 
 export const metadata: Metadata = {
@@ -28,7 +21,7 @@ export default function MarketingLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en-GB" className={`${geist.variable} ${newsreader.variable}`}>
+    <html lang="en-GB" className={geistMono.variable}>
       <body className="font-sans antialiased">{children}</body>
     </html>
   );
