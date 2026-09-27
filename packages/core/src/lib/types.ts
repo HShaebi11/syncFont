@@ -208,18 +208,22 @@ export interface Entitlement {
   plan: PlanId;
   status: SubscriptionStatus;
   isLaunchPricing: boolean;
+  /** Polar or Apple subscription active (not app trial). */
+  isPaidSubscriber: boolean;
   storageLimitBytes: number;
   storageUsedBytes: number;
   deviceLimit: number;
   deviceCount: number;
   features: EntitlementFeatures;
   currentPeriodEnd?: string;
+  /** Set while Polar subscription is trialing. */
+  trialEndsAt?: string;
 }
 
 export type CheckoutPriceId = "pro_annual" | "pro_launch" | "pro_monthly";
 
 export interface BillingPlanPublic {
-  id: CheckoutPriceId | "free";
+  id: CheckoutPriceId | "free" | "trial";
   name: string;
   priceGbp: number;
   interval: "year" | "month" | null;

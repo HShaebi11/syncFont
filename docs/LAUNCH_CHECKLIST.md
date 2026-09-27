@@ -101,13 +101,13 @@ Use a **100% Polar discount** or real card in a test account:
 
 ### Plans sanity (Launch phase)
 
-While `LAUNCH_OFFER_ACTIVE=true`, **`GET /api/billing/plans`** must return only **`free`** + **`pro_launch`** (name **Launch**). Checkout must reject `pro_annual` / `pro_monthly` even if env UUIDs exist.
+While `LAUNCH_OFFER_ACTIVE=true`, **`GET /api/billing/plans`** must return **`pro_launch` only** (name **Launch**). The **7-day trial is on the Polar Launch product** (`LAUNCH_TRIAL_DAYS`, default 7) — run `npm run polar:catalog -- ensure` to sync trial on the product. Checkout creates a **`trialing`** Polar subscription; webhooks must set `POLAR_WEBHOOK_SECRET` on Vercel. Checkout must reject `pro_annual` / `pro_monthly` even if env UUIDs exist.
 
 Prod on old `main` may still show four plans until this branch deploys. Verify after deploy:
 
 ```bash
 curl -sS https://app.typefolio.app/api/billing/plans | python3 -c "import json,sys; d=json.load(sys.stdin); print([p['id'] for p in d['plans']])"
-# Expected: ['free', 'pro_launch']
+# Expected: ['pro_launch']
 ```
 
 ---

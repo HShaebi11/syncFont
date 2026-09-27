@@ -10,6 +10,17 @@ export const PRO_STORAGE_LIMIT_BYTES = 524_288_000;
 export const FREE_DEVICE_LIMIT = 1;
 export const PRO_DEVICE_LIMIT = 2;
 
+export function hasPaidSubscription(row: SubscriptionRow | null): boolean {
+  if (!row) {
+    return false;
+  }
+
+  return (
+    isProPolarStatus(row.polarStatus, row.polarCurrentPeriodEnd) ||
+    isProAppleStatus(row.appleStatus, row.appleExpiresAt)
+  );
+}
+
 export function planLimits(plan: PlanId): {
   storageLimitBytes: number;
   deviceLimit: number;
@@ -134,10 +145,12 @@ export function effectiveProFromSubscriptionRow(
       : undefined;
 
   const isLaunchPricing = polarActive ? row.polarIsLaunchPricing : false;
+  const polarTrialing =
+    polarActive && row.polarStatus?.trim().toLowerCase() === "trialing";
 
   return {
     isPro: true,
-    status: "active",
+    status: polarTrialing ? "trialing" : "active",
     currentPeriodEnd,
     isLaunchPricing,
   };
@@ -213,19 +226,27 @@ export async function getUserEntitlement(userId: string): Promise<Entitlement> {
     getDeviceCount(userId),
   ]);
 
+  const paid = hasPaidSubscription(row);
   const effective = effectiveProFromSubscriptionRow(row);
   const limits = planLimits(effective.isPro ? "pro" : "free");
+  const polarTrialing =
+    row?.polarStatus?.trim().toLowerCase() === "trialing" && paid;
 
   return {
     plan: effective.isPro ? "pro" : "free",
     status: effective.status,
     isLaunchPricing: effective.isLaunchPricing,
+    isPaidSubscriber: paid,
     storageLimitBytes: limits.storageLimitBytes,
     storageUsedBytes,
     deviceLimit: limits.deviceLimit,
     deviceCount,
     features: limits.features,
     currentPeriodEnd: effective.currentPeriodEnd,
+    trialEndsAt:
+      polarTrialing && row?.polarCurrentPeriodEnd
+        ? row.polarCurrentPeriodEnd
+        : undefined,
   };
 }
 

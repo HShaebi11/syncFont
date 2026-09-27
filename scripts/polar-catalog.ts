@@ -2,6 +2,10 @@ import type { Product } from "@polar-sh/sdk/models/components/product.js";
 
 import { resolvePolarProductId } from "@typefolio/core/billing/plans";
 import { getPolarClient } from "@typefolio/core/billing/polar";
+import {
+  getLaunchTrialDays,
+  polarLaunchTrialSettings,
+} from "@typefolio/core/billing/polar-trial";
 
 const PRODUCT_NAME_LAUNCH = "Typefolio Launch";
 const PRODUCT_NAME_PRO_ANNUAL = "Typefolio Pro Annual";
@@ -136,14 +140,34 @@ async function cmdList(): Promise<void> {
   }
 }
 
+async function syncLaunchProductTrial(productId: string): Promise<void> {
+  const polar = requirePolarClient();
+  const trial = polarLaunchTrialSettings();
+  await polar.products.update({
+    id: productId,
+    productUpdate: {
+      trialInterval: trial.trialInterval,
+      trialIntervalCount: trial.trialIntervalCount,
+    },
+  });
+  console.log(
+    `Launch trial: ${trial.trialIntervalCount} ${trial.trialInterval}(s) (LAUNCH_TRIAL_DAYS=${getLaunchTrialDays()})`,
+  );
+}
+
 async function ensureProduct(
   existing: Product[],
   spec: CatalogSpec,
+  options?: { polarTrial?: boolean },
 ): Promise<string> {
   const polar = requirePolarClient();
+  const trial = options?.polarTrial ? polarLaunchTrialSettings() : null;
   const found = existing.find((p) => p.name === spec.name);
   if (found?.id) {
     console.log(`Exists: ${spec.name} (${found.id})`);
+    if (options?.polarTrial) {
+      await syncLaunchProductTrial(found.id);
+    }
     return found.id;
   }
 
@@ -151,6 +175,12 @@ async function ensureProduct(
   const created = await polar.products.create({
     name: spec.name,
     recurringInterval: spec.recurringInterval,
+    ...(trial
+      ? {
+          trialInterval: trial.trialInterval,
+          trialIntervalCount: trial.trialIntervalCount,
+        }
+      : {}),
     prices: [
       {
         amountType: "fixed",
@@ -160,6 +190,9 @@ async function ensureProduct(
     ],
   });
   console.log(`Created: ${spec.name} (${created.id})`);
+  if (options?.polarTrial) {
+    await syncLaunchProductTrial(created.id);
+  }
   return created.id;
 }
 
@@ -194,7 +227,9 @@ async function cmdEnsure(withPro: boolean): Promise<void> {
 
   const ids: Record<string, string> = {};
   for (const spec of specs) {
-    ids[spec.envKey] = await ensureProduct(existing, spec);
+    ids[spec.envKey] = await ensureProduct(existing, spec, {
+      polarTrial: spec.envKey === "POLAR_PRODUCT_LAUNCH",
+    });
   }
 
   printEnvBlock(ids);
