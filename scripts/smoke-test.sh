@@ -72,12 +72,12 @@ echo "  $ME_JSON"
 LIBRARY_ID="$(python3 -c "import json,sys; print(json.load(sys.stdin)['library']['id'])" <<< "$ME_JSON")"
 echo "  library: $LIBRARY_ID"
 
-echo "5. GET manifest (free tier → sync gated)"
+echo "5. GET manifest (no Polar sub yet → sync gated)"
 MANIFEST_STATUS="$(curl -s -o /tmp/typefolio-manifest.json -w '%{http_code}' \
   -H "Authorization: Bearer $SESSION_TOKEN" \
   "$BASE_URL/api/libraries/$LIBRARY_ID/manifest")"
 if [[ "$MANIFEST_STATUS" != "403" ]]; then
-  echo "  ERROR: expected 403 for free sync, got $MANIFEST_STATUS"
+  echo "  ERROR: expected 403 before Launch checkout, got $MANIFEST_STATUS"
   cat /tmp/typefolio-manifest.json
   exit 1
 fi

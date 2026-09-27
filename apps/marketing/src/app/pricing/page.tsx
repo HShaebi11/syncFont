@@ -114,13 +114,8 @@ export default async function PricingPage() {
         >
           {plans.map((plan) => {
             const isLaunch = plan.id === "pro_launch";
-            const ctaLabel =
-              plan.id === "free"
-                ? "Create free account"
-                : isLaunch
-                  ? "Get Launch"
-                  : "Sign up for Pro";
-            const showCta = plan.id === "free" || plan.available !== false;
+            const ctaLabel = isLaunch ? "Start free trial" : "Sign up";
+            const showCta = plan.available !== false;
 
             return (
               <article
@@ -191,10 +186,10 @@ export default async function PricingPage() {
       )}
 
       <p style={{ margin: 0, fontSize: "0.875rem", color: "#737373", maxWidth: "36rem" }}>
-        Already have an account?{" "}
-        <a href={apiUrl("/auth/sign-in")} style={{ color: "#171717" }}>Sign in</a> and upgrade from{" "}
-        <strong style={{ fontWeight: 500 }}>Settings → Account</strong>. Launch pricing is grandfathered
-        while you stay subscribed.
+        Sign up, then start Launch checkout for a 7-day free trial (via Polar). After the trial,
+        billing continues at £20/year unless you cancel in{" "}
+        <strong style={{ fontWeight: 500 }}>Settings → Account</strong>. Already signed up?{" "}
+        <a href={apiUrl("/auth/sign-in")} style={{ color: "#171717" }}>Sign in</a>.
       </p>
 
       <p style={{ margin: 0, fontSize: "0.875rem", color: "#737373" }}>

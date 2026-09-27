@@ -11,16 +11,17 @@ afterEach(() => {
 });
 
 describe("getPublicBillingPlans", () => {
-  it("returns only Free and Launch while launch offer is active", () => {
+  it("returns Launch only (Polar trial) while launch offer is active", () => {
     process.env.LAUNCH_OFFER_ACTIVE = "true";
     process.env.POLAR_PRODUCT_LAUNCH = "694b0abe-c4af-4aa8-b67e-794392135307";
+    process.env.LAUNCH_TRIAL_DAYS = "7";
 
     const { plans, launchOffer } = getPublicBillingPlans();
 
     assert.equal(launchOffer.active, true);
-    assert.deepEqual(plans.map((p) => p.id), ["free", "pro_launch"]);
-    assert.equal(plans[1]?.name, "Launch");
-    assert.equal(plans[1]?.checkoutPriceId, "pro_launch");
+    assert.deepEqual(plans.map((p) => p.id), ["pro_launch"]);
+    assert.equal(plans[0]?.name, "Launch");
+    assert.match(plans[0]?.features[0] ?? "", /7-day free trial/);
   });
 
   it("returns Pro tiers when launch offer is closed", () => {

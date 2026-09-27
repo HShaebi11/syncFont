@@ -50,7 +50,7 @@ export default function SettingsPage() {
   const [mobileData, setMobileData] = useState(false);
   const [checkoutLoading, setCheckoutLoading] = useState(false);
 
-  const showLaunchUpgrade = entitlement?.plan === "free";
+  const showLaunchUpgrade = entitlement && !entitlement.isPaidSubscriber;
 
   return (
     <div>

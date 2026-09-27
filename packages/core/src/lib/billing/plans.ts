@@ -5,6 +5,7 @@ import {
   PRO_DEVICE_LIMIT,
   PRO_STORAGE_LIMIT_BYTES,
 } from "@typefolio/core/entitlements";
+import { getLaunchTrialDays } from "@typefolio/core/billing/polar-trial";
 import type { CheckoutPriceId } from "@typefolio/core/types";
 
 export function resolvePolarProductId(priceId: CheckoutPriceId): string | null {
@@ -41,17 +42,7 @@ export function getPublicBillingPlans(): {
   launchOffer: { active: boolean; message: string };
 } {
   const launchActive = isLaunchOfferActive();
-
-  const freePlan = {
-    id: "free" as const,
-    name: "Free",
-    priceGbp: 0,
-    interval: null as null,
-    storageLimitBytes: FREE_STORAGE_LIMIT_BYTES,
-    deviceLimit: FREE_DEVICE_LIMIT,
-    features: ["Upload fonts", "Web library", "1 device"],
-    highlight: false,
-  };
+  const trialDays = getLaunchTrialDays();
 
   const launchPlan = {
     id: "pro_launch" as const,
@@ -61,10 +52,11 @@ export function getPublicBillingPlans(): {
     storageLimitBytes: PRO_STORAGE_LIMIT_BYTES,
     deviceLimit: PRO_DEVICE_LIMIT,
     features: [
+      `${trialDays}-day free trial (Polar)`,
+      "Then £20/year — hosting & sync included",
       "500 MB storage",
-      "Auto-sync",
-      "Hosting included",
-      "£20/year locked in",
+      "2 devices, auto-sync",
+      "Locked in while you stay subscribed",
     ],
     highlight: true,
     badge: "Launch",
@@ -74,18 +66,27 @@ export function getPublicBillingPlans(): {
 
   if (launchActive) {
     return {
-      plans: [freePlan, launchPlan],
+      plans: [launchPlan],
       launchOffer: {
         active: true,
         message:
-          "Typefolio Launch — £20/year, all-inclusive (hosting & sync). Locked in while you stay subscribed.",
+          `Start with a ${trialDays}-day free trial on Launch, then £20/year all-inclusive. Billing is handled by Polar.`,
       },
     };
   }
 
   return {
     plans: [
-      freePlan,
+      {
+        id: "free" as const,
+        name: "Free",
+        priceGbp: 0,
+        interval: null as null,
+        storageLimitBytes: FREE_STORAGE_LIMIT_BYTES,
+        deviceLimit: FREE_DEVICE_LIMIT,
+        features: ["Upload fonts", "Web library", "1 device"],
+        highlight: false,
+      },
       {
         id: "pro_annual",
         name: "Pro",

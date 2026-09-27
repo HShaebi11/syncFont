@@ -44,6 +44,18 @@ describe("effectiveProFromSubscriptionRow", () => {
   it("returns free when no providers are active", () => {
     const result = effectiveProFromSubscriptionRow(baseRow());
     assert.equal(result.isPro, false);
+    assert.equal(result.status, "active");
+  });
+
+  it("returns trialing when Polar subscription is trialing", () => {
+    const result = effectiveProFromSubscriptionRow(
+      baseRow({
+        polarStatus: "trialing",
+        polarCurrentPeriodEnd: new Date(Date.now() + 86_400_000).toISOString(),
+      }),
+    );
+    assert.equal(result.isPro, true);
+    assert.equal(result.status, "trialing");
   });
 
   it("returns pro when Polar is active", () => {

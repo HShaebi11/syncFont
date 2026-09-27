@@ -23,6 +23,12 @@ function readUserIdFromSubscription(subscription: Subscription): string | null {
 }
 
 function periodEndIso(subscription: Subscription): string | null {
+  const status = subscription.status?.toLowerCase();
+  const trialEnd = subscription.trialEnd;
+  if (status === "trialing" && trialEnd) {
+    return trialEnd instanceof Date ? trialEnd.toISOString() : new Date(trialEnd).toISOString();
+  }
+
   const end = subscription.currentPeriodEnd ?? subscription.endsAt;
   if (!end) {
     return null;

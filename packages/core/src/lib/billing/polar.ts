@@ -3,6 +3,7 @@ import { Polar } from "@polar-sh/sdk";
 import { getMarketingOrigin } from "@typefolio/core/auth/config";
 import {
   effectiveProFromSubscriptionRow,
+  hasPaidSubscription,
   getSubscriptionRow,
   isLaunchOfferActive,
   isLaunchPricingFromCheckoutPriceId,
@@ -84,8 +85,7 @@ export async function createCheckoutSession(input: {
   }
 
   const subscription = await getSubscriptionRow(input.userId);
-  const effective = effectiveProFromSubscriptionRow(subscription);
-  if (effective.isPro) {
+  if (hasPaidSubscription(subscription)) {
     throw new Error("already_subscribed");
   }
 
