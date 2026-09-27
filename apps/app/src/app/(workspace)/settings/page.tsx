@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 import { openBillingPortal } from "@typefolio/core/api";
 
+import { marketingDownloadsUrl } from "@/lib/marketing";
 import { SignOutButton } from "@/components/sign-out-button";
 import { useLibrary } from "@/components/library/library-provider";
 import { Button } from "@/components/ui/button";
@@ -65,6 +66,17 @@ export default function SettingsPage() {
               <CardDescription>Plan and session controls.</CardDescription>
             </CardHeader>
             <CardContent>
+              <SettingRow
+                title="Desktop app"
+                description="Download Typefolio for Mac, Windows, or Linux."
+                control={
+                  <Button variant="outline" asChild>
+                    <a href={marketingDownloadsUrl()} target="_blank" rel="noopener noreferrer">
+                      Download
+                    </a>
+                  </Button>
+                }
+              />
               <SettingRow
                 title="Plan"
                 description={entitlement ? `${entitlement.plan} · ${entitlement.status}` : "Loading"}

@@ -1,0 +1,98 @@
+name: Desktop release
+
+on:
+  workflow_dispatch:
+    inputs:
+      publish_blob:
+        description: Upload installers to Vercel Blob and update manifest
+        type: boolean
+        default: true
+  push:
+    tags:
+      - "desktop-v*"
+
+concurrency:
+  group: desktop-release-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-macos:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npm run dist:desktop:mac
+      - uses: actions/upload-artifact@v4
+        with:
+          name: desktop-macos
+          path: |
+            apps/typefolio-desktop/release/**/*.dmg
+            !apps/typefolio-desktop/release/**/*.blockmap
+          if-no-files-found: error
+
+  build-windows:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npm run dist:desktop:win
+      - uses: actions/upload-artifact@v4
+        with:
+          name: desktop-windows
+          path: apps/typefolio-desktop/release/**/*.exe
+          if-no-files-found: error
+
+  build-linux:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - run: npm run dist:desktop:linux
+      - uses: actions/upload-artifact@v4
+        with:
+          name: desktop-linux
+          path: |
+            apps/typefolio-desktop/release/**/*.AppImage
+            apps/typefolio-desktop/release/**/*.deb
+          if-no-files-found: error
+
+  publish-blob:
+    needs: [build-macos, build-windows, build-linux]
+    if: >-
+      github.event_name == 'push' ||
+      (github.event_name == 'workflow_dispatch' && inputs.publish_blob)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with:
+          path: artifacts
+      - name: Stage release folder
+        run: |
+          VERSION=$(node -p "require('./apps/typefolio-desktop/package.json').version")
+          mkdir -p "apps/typefolio-desktop/release/${VERSION}"
+          find artifacts -type f \( -name '*.dmg' -o -name '*.exe' -o -name '*.AppImage' -o -name '*.deb' \) -exec cp {} "apps/typefolio-desktop/release/${VERSION}/" \;
+          ls -la "apps/typefolio-desktop/release/${VERSION}"
+          echo "VERSION=${VERSION}" >> "$GITHUB_ENV"
+      - name: Upload to Vercel Blob
+        env:
+          BLOB_READ_WRITE_TOKEN: ${{ secrets.DESKTOP_BLOB_READ_WRITE_TOKEN }}
+          NEXT_PUBLIC_MARKETING_URL: https://typefolio.app
+        run: node scripts/upload-desktop-releases.mjs --release-dir "apps/typefolio-desktop/release/${VERSION}"

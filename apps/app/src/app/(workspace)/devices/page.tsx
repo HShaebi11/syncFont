@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { MonitorIcon, SmartphoneIcon, TabletIcon } from "lucide-react";
 
+import { marketingDownloadsUrl } from "@/lib/marketing";
 import { useLibrary } from "@/components/library/library-provider";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -42,7 +43,13 @@ export default function DevicesPage() {
       {devices.length === 0 ? (
         <EmptyState
           title="No devices yet"
-          body="Install Typefolio on a Mac or iPad to start syncing."
+          body="Install Typefolio on desktop, Mac, or iPad to start syncing."
+          action={{
+            label: "Download desktop app",
+            onClick: () => {
+              window.open(marketingDownloadsUrl(), "_blank", "noopener,noreferrer");
+            },
+          }}
         />
       ) : (
         <div className="grid gap-4 md:grid-cols-2">

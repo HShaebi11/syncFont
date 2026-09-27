@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "typecheck": "tsc --noEmit",
+    "email:dev": "email dev --dir src/emails --port 43126",
     "db:push": "drizzle-kit push",
     "test": "node --import tsx --test src/lib/entitlements.test.ts src/lib/billing/polar-webhook.test.ts src/lib/billing/apple-webhook.test.ts src/lib/desktop-auth.test.ts src/lib/font-families.test.ts src/lib/font-metadata.test.ts"
   },
@@ -18,9 +19,12 @@
     "drizzle-orm": "^0.45.2",
     "fontkit": "^2.0.4",
     "nanoid": "^6.0.1",
+    "react": "^19.2.8",
+    "react-email": "^6.11.0",
     "resend": "^6.30.0"
   },
   "devDependencies": {
+    "@types/react": "^19",
     "drizzle-kit": "^0.31.10",
     "tsx": "^4.23.13",
     "typescript": "^5"

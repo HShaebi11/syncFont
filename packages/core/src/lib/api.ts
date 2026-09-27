@@ -16,7 +16,30 @@ import type {
   ShareVisibility,
 } from "@typefolio/core/types";
 
+export type TypefolioApiConfig = {
+  baseUrl: string;
+  getAccessToken?: () => string | null | undefined;
+  useCookies?: boolean;
+};
+
+let apiConfig: TypefolioApiConfig | null = null;
+
+export function configureTypefolioApi(config: TypefolioApiConfig): void {
+  apiConfig = {
+    useCookies: false,
+    ...config,
+    baseUrl: config.baseUrl.replace(/\/$/, ""),
+  };
+}
+
+export function resetTypefolioApiConfig(): void {
+  apiConfig = null;
+}
+
 function publicApiBase(): string {
+  if (apiConfig?.baseUrl) {
+    return apiConfig.baseUrl;
+  }
   if (typeof window !== "undefined") {
     return "";
   }
@@ -45,9 +68,18 @@ function request(
   path: string,
   init: RequestInit = {},
 ): Promise<Response> {
+  const headers = new Headers(init.headers);
+  const token = apiConfig?.getAccessToken?.();
+  if (token) {
+    headers.set("Authorization", `Bearer ${token}`);
+  }
+
+  const useCookies = apiConfig ? (apiConfig.useCookies ?? false) : true;
+
   return fetch(`${publicApiBase()}${path}`, {
-    credentials: "include",
+    credentials: useCookies ? "include" : "omit",
     ...init,
+    headers,
   });
 }
 
