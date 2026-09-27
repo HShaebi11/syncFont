@@ -6,14 +6,21 @@ import {
   getLaunchTrialDays,
   polarLaunchTrialSettings,
 } from "@typefolio/core/billing/polar-trial";
+import {
+  LAUNCH_PRICE_GBP_MINOR,
+  PRO_ANNUAL_PRICE_GBP_MINOR,
+  PRO_MONTHLY_PRICE_GBP_MINOR,
+} from "@typefolio/core/billing/prices";
 
 const PRODUCT_NAME_LAUNCH = "Typefolio Launch";
-const PRODUCT_NAME_PRO_ANNUAL = "Typefolio Pro Annual";
-const PRODUCT_NAME_PRO_MONTHLY = "Typefolio Pro Monthly";
+const PRODUCT_NAME_PRO = "Typefolio Pro";
+const PRODUCT_NAME_PRO_MONTHLY = "Typefolio Pro — monthly";
 
-const LAUNCH_YEARLY_GBP_MINOR = 2000;
-const PRO_ANNUAL_GBP_MINOR = 4000;
-const PRO_MONTHLY_GBP_MINOR = 499;
+/** Legacy Polar product names — archived when found during sync. */
+const LEGACY_PRODUCT_NAMES = new Set([
+  "Typefolio Pro Annual",
+  "Typefolio Pro Monthly",
+]);
 
 type CatalogSpec = {
   envKey: "POLAR_PRODUCT_LAUNCH" | "POLAR_PRODUCT_ANNUAL" | "POLAR_PRODUCT_MONTHLY";
@@ -29,6 +36,7 @@ Commands:
   verify   Check POLAR_ACCESS_TOKEN (lists one product)
   list     List active products and env mapping
   ensure   Create missing catalog products (idempotent by name)
+  sync     Update Launch price/trial; archive legacy catalog names
 
 Options:
   --with-pro   Also ensure Pro annual (£40/yr) and monthly (£4.99/mo)
@@ -38,7 +46,8 @@ Examples:
   npm run polar:catalog -- verify
   npm run polar:catalog -- list
   npm run polar:catalog -- ensure
-  npm run polar:catalog -- ensure --with-pro`);
+  npm run polar:catalog -- ensure --with-pro
+  npm run polar:catalog -- sync`);
 }
 
 function requirePolarClient() {
@@ -140,6 +149,73 @@ async function cmdList(): Promise<void> {
   }
 }
 
+function isFixedGbpPrice(
+  price: NonNullable<Product["prices"]>[number],
+): price is { id: string; amountType: "fixed"; priceAmount: number; priceCurrency: string; isArchived: boolean } {
+  return (
+    price.amountType === "fixed" &&
+    "priceAmount" in price &&
+    typeof price.priceAmount === "number" &&
+    "priceCurrency" in price &&
+    typeof price.priceCurrency === "string" &&
+    "isArchived" in price &&
+    typeof price.isArchived === "boolean" &&
+    "id" in price &&
+    typeof price.id === "string"
+  );
+}
+
+async function archiveLegacyProducts(existing: Product[]): Promise<void> {
+  const polar = requirePolarClient();
+  for (const product of existing) {
+    if (!LEGACY_PRODUCT_NAMES.has(product.name)) {
+      continue;
+    }
+    if (product.isArchived || !product.id) {
+      continue;
+    }
+    console.log(`Archiving legacy product: ${product.name} (${product.id})`);
+    await polar.products.update({
+      id: product.id,
+      productUpdate: { isArchived: true },
+    });
+  }
+}
+
+async function syncLaunchProductPrice(productId: string): Promise<void> {
+  const polar = requirePolarClient();
+  const product = await polar.products.get({ id: productId });
+  const prices = product.prices ?? [];
+  const activeFixed = prices.filter(isFixedGbpPrice).filter(
+    (p) => !p.isArchived && p.priceCurrency.toLowerCase() === "gbp",
+  );
+
+  const hasTarget = activeFixed.some((p) => p.priceAmount === LAUNCH_PRICE_GBP_MINOR);
+  if (hasTarget) {
+    console.log(
+      `Launch price already GBP ${(LAUNCH_PRICE_GBP_MINOR / 100).toFixed(2)}/year on ${productId}`,
+    );
+    return;
+  }
+
+  console.log(
+    `Setting Launch price to GBP ${(LAUNCH_PRICE_GBP_MINOR / 100).toFixed(2)}/year (Polar allows one fixed price per product; existing subscriptions keep their locked amount).`,
+  );
+  await polar.products.update({
+    id: productId,
+    productUpdate: {
+      name: PRODUCT_NAME_LAUNCH,
+      prices: [
+        {
+          amountType: "fixed",
+          priceAmount: LAUNCH_PRICE_GBP_MINOR,
+          priceCurrency: "gbp",
+        },
+      ],
+    },
+  });
+}
+
 async function syncLaunchProductTrial(productId: string): Promise<void> {
   const polar = requirePolarClient();
   const trial = polarLaunchTrialSettings();
@@ -204,7 +280,7 @@ async function cmdEnsure(withPro: boolean): Promise<void> {
       envKey: "POLAR_PRODUCT_LAUNCH",
       name: PRODUCT_NAME_LAUNCH,
       recurringInterval: "year",
-      priceAmountMinor: LAUNCH_YEARLY_GBP_MINOR,
+      priceAmountMinor: LAUNCH_PRICE_GBP_MINOR,
     },
   ];
 
@@ -212,15 +288,15 @@ async function cmdEnsure(withPro: boolean): Promise<void> {
     specs.push(
       {
         envKey: "POLAR_PRODUCT_ANNUAL",
-        name: PRODUCT_NAME_PRO_ANNUAL,
+        name: PRODUCT_NAME_PRO,
         recurringInterval: "year",
-        priceAmountMinor: PRO_ANNUAL_GBP_MINOR,
+        priceAmountMinor: PRO_ANNUAL_PRICE_GBP_MINOR,
       },
       {
         envKey: "POLAR_PRODUCT_MONTHLY",
         name: PRODUCT_NAME_PRO_MONTHLY,
         recurringInterval: "month",
-        priceAmountMinor: PRO_MONTHLY_GBP_MINOR,
+        priceAmountMinor: PRO_MONTHLY_PRICE_GBP_MINOR,
       },
     );
   }
@@ -239,6 +315,21 @@ async function cmdEnsure(withPro: boolean): Promise<void> {
       "\nPro products skipped. Run with --with-pro when Pro pricing is ready.",
     );
   }
+}
+
+async function cmdSync(): Promise<void> {
+  const existing = await listActiveProducts();
+  await archiveLegacyProducts(existing);
+
+  const launchId = resolvePolarProductId("pro_launch");
+  if (!launchId) {
+    console.error("POLAR_PRODUCT_LAUNCH is unset. Run ensure first or set env.");
+    process.exit(1);
+  }
+
+  await syncLaunchProductPrice(launchId);
+  await syncLaunchProductTrial(launchId);
+  console.log("\nLaunch catalog sync complete.");
 }
 
 async function main(): Promise<void> {
@@ -262,6 +353,9 @@ async function main(): Promise<void> {
       break;
     case "ensure":
       await cmdEnsure(withPro);
+      break;
+    case "sync":
+      await cmdSync();
       break;
     default:
       console.error(`Unknown command: ${command}\n`);

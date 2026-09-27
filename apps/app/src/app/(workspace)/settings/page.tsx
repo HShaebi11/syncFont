@@ -5,6 +5,10 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { openBillingPortal, startBillingCheckout } from "@typefolio/core/api";
+import {
+  formatGbpPerYearShort,
+  LAUNCH_PRICE_GBP,
+} from "@typefolio/core/billing/prices";
 
 import { marketingDownloadsUrl } from "@/lib/marketing";
 import { SignOutButton } from "@/components/sign-out-button";
@@ -107,7 +111,9 @@ export default function SettingsPage() {
                           }
                         }}
                       >
-                        {checkoutLoading ? "Redirecting…" : "Upgrade to Launch — £20/yr"}
+                        {checkoutLoading
+                          ? "Redirecting…"
+                          : `Upgrade to Launch — ${formatGbpPerYearShort(LAUNCH_PRICE_GBP)}`}
                       </Button>
                     ) : null}
                     <Button

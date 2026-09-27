@@ -21,7 +21,9 @@ describe("getPublicBillingPlans", () => {
     assert.equal(launchOffer.active, true);
     assert.deepEqual(plans.map((p) => p.id), ["pro_launch"]);
     assert.equal(plans[0]?.name, "Launch");
+    assert.equal(plans[0]?.priceGbp, 14.99);
     assert.match(plans[0]?.features[0] ?? "", /7-day free trial/);
+    assert.match(plans[0]?.features[1] ?? "", /£14\.99\/year/);
   });
 
   it("returns Pro tiers when launch offer is closed", () => {
@@ -33,6 +35,7 @@ describe("getPublicBillingPlans", () => {
 
     assert.equal(launchOffer.active, false);
     assert.deepEqual(plans.map((p) => p.id), ["pro_annual", "pro_monthly"]);
+    assert.deepEqual(plans.map((p) => p.name), ["Pro", "Monthly"]);
     assert.equal(plans.some((p) => p.id === "pro_launch"), false);
   });
 });

@@ -25,6 +25,9 @@
     "paths": {
       "@/*": [
         "./src/*"
+      ],
+      "@typefolio/core/*": [
+        "../../packages/core/src/lib/*"
       ]
     }
   },

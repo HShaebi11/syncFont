@@ -46,24 +46,24 @@ One product, one brand, one account. No separate “utility vs platform” split
 
 ## Pricing
 
-Subscription-first. **Polar** is the web billing provider (Launch £20/yr, Pro later). Apple IAP remains optional for App Store distribution (see below). Historical note: RevenueCat + Stripe was considered earlier; implementation is Polar-only on web.
+Subscription-first. **Polar** is the web billing provider (Launch £14.99/yr, Pro later). Apple IAP remains optional for App Store distribution (see below). Historical note: RevenueCat + Stripe was considered earlier; implementation is Polar-only on web.
 
 ### Plans
 
 | Plan | Price (GBP) | Includes |
 |------|-------------|----------|
 | **Free** | £0 | ~50 MB storage, 1 device, manual download (web only) |
-| **Pro Annual** | **£40/yr** | ~500 MB, 2 devices, auto-sync + install; default upsell (~£3.33/mo) |
-| **Pro Monthly** | £4.99/mo | Same as Pro annual; for users who prefer monthly billing |
-| **Pro Launch** | **£20/yr** | Same as Pro; **50% off** regular annual price for early adopters |
+| **Pro** | **£40/yr** | ~500 MB, 2 devices, auto-sync + install; default upsell (~£3.33/mo) |
+| **Monthly** | £4.99/mo | Same caps as Pro; pay monthly |
+| **Launch** | **£14.99/yr** | Same as Pro; early-adopter price while the launch offer is open |
 
 ### Launch pricing
 
-- **Anchor:** £40/year is the regular Pro annual price.
-- **Launch offer:** **50% off → £20/year** for early adopters.
-- **Grandfathering:** launch subscribers keep **£20/year** locked in (loyalty, simple story).
-- **Messaging:** *“Launch pricing: £20/year — locked in for early users.”*
-- Close launch pricing when ready (seat cap or date) → new signups pay **£40/year**.
+- **Anchor:** £40/year is the regular Pro price.
+- **Launch offer:** **£14.99/year** for early adopters (Polar product **Typefolio Launch**).
+- **Grandfathering:** launch subscribers keep their checkout price locked in while subscribed (including anyone on an earlier launch price).
+- **Messaging:** *“Launch pricing: £14.99/year — locked in while you stay subscribed.”*
+- Close launch pricing when ready (seat cap or date) → new signups pay **£40/year** (or monthly).
 
 ### Free tier as acquisition
 
@@ -78,13 +78,13 @@ The free plan is intentionally useful but limited — it builds the email list a
 | Price | Net after Stripe (approx.) | Profit per active user/year (approx.) |
 |-------|---------------------------|---------------------------------------|
 | £15/year | ~£14.26 | ~£12.75 |
-| £20/year (launch) | ~£19.00 | ~£17–18 |
+| £14.99/year (launch) | ~£14.26 | ~£13 |
 | £24.99/year | ~£24.00 | ~£22 |
 | **£40/year** | ~£38.50 | **~£37** |
 
 - **£15/year** works per user but leaves little room for free-tier subsidy, support, or future App Store fees.
 - **£24.99/year permanent** reads as “budget utility” and is hard to raise later.
-- **£40/year with £20 launch** gives premium positioning, launch urgency, and ~3× the margin of £15/year at the same infra cost.
+- **£40/year with £14.99 launch** keeps a premium anchor while the launch price stays accessible.
 
 ### Lifetime / founding (optional)
 
@@ -107,18 +107,18 @@ A separate **£69 one-time founding** tier was considered earlier. If offered:
 
 #### Per paying subscriber (annual)
 
-| | Launch (£20/yr) | Regular (£40/yr) |
-|--|-----------------|------------------|
-| They pay | £20.00 | £40.00 |
-| Stripe (~2.9% + 30p) | ~£0.88 | ~£1.46 |
+| | Launch (£14.99/yr) | Regular (£40/yr) |
+|--|---------------------|------------------|
+| They pay | £14.99 | £40.00 |
+| Stripe (~2.9% + 30p) | ~£0.73 | ~£1.46 |
 | Infra (active Pro user) | ~£0.07–0.12/mo (~£1/yr) | ~£1/yr |
-| **Profit per user/year** | **~£17–18** | **~£37** |
+| **Profit per user/year** | **~£13** | **~£37** |
 
 #### Break-even (fixed hosting)
 
 Fixed platform cost at soft launch: ~**£30–35/month** (~£360–420/year) on Vercel Pro + Neon paid tiers.
 
-- At **£20/year** launch (~£18 profit/user): ~**20–24 paying users/year** covers fixed hosting.
+- At **£14.99/year** launch (~£13 profit/user): ~**28–32 paying users/year** covers fixed hosting.
 - At **£40/year** (~£37 profit/user): ~**10–12 paying users/year** covers fixed hosting.
 
 Below those counts, stay on free hosting tiers or subsidise until traction.
@@ -126,7 +126,7 @@ Below those counts, stay on free hosting tiers or subsidise until traction.
 #### Example launch month (illustrative)
 
 - 300 free (web) → ~£6/mo variable
-- 40 Pro launch (£20/yr) → ~£2.80/mo variable + ~£67/mo revenue (annualised cash)
+- 40 Launch (£14.99/yr) → ~£2.80/mo variable + ~£50/mo revenue (annualised cash)
 - Fixed hosting ~£35/mo
 
 Revenue scales with conversion; free users are cheap list-building if conversion stays above ~5%.

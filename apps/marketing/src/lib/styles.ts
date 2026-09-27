@@ -5,24 +5,25 @@ export const primaryLink: CSSProperties = {
   alignItems: "center",
   justifyContent: "center",
   borderRadius: "0.5rem",
-  background: "#171717",
+  background: "#000",
   padding: "0.625rem 1.25rem",
   fontSize: "0.875rem",
   fontWeight: 500,
   color: "#fff",
   textDecoration: "none",
+  border: "1px solid #000",
 };
 
 export const secondaryLink: CSSProperties = {
   ...primaryLink,
   background: "#fff",
-  color: "#171717",
-  border: "1px solid #d4d4d4",
+  color: "#000",
+  border: "1px solid #000",
 };
 
 export const disabledButton: CSSProperties = {
   ...secondaryLink,
-  opacity: 0.55,
+  opacity: 0.45,
   cursor: "not-allowed",
   pointerEvents: "none",
 };
@@ -35,6 +36,8 @@ export const pageShell: CSSProperties = {
   flexDirection: "column",
   gap: "2rem",
   padding: "3rem 1.5rem 5rem",
+  background: "#000",
+  color: "#fff",
 };
 
 export const siteNav: CSSProperties = {
@@ -45,12 +48,12 @@ export const siteNav: CSSProperties = {
 };
 
 export const navLink: CSSProperties = {
-  color: "#525252",
+  color: "#a3a3a3",
   textDecoration: "none",
 };
 
 export const navLinkActive: CSSProperties = {
   ...navLink,
-  color: "#171717",
+  color: "#fff",
   fontWeight: 500,
 };

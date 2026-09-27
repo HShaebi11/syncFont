@@ -41,8 +41,9 @@ Set in **`.env.local`** at the repo root (see `.env.example`):
 ```bash
 npm run polar:catalog -- verify    # token + API
 npm run polar:catalog -- list      # products + env UUID mapping
-npm run polar:catalog -- ensure    # idempotent: Typefolio Launch £20/yr
-npm run polar:catalog -- ensure --with-pro   # also Pro annual £40/yr + monthly £4.99
+npm run polar:catalog -- ensure    # idempotent: Typefolio Launch £14.99/yr
+npm run polar:catalog -- sync      # add new Launch price + trial; archive legacy product names
+npm run polar:catalog -- ensure --with-pro   # also Typefolio Pro £40/yr + monthly £4.99
 ```
 
 Paste the printed `POLAR_PRODUCT_*` lines into `.env.local`. The CLI never prints the access token.
@@ -51,7 +52,7 @@ Paste the printed `POLAR_PRODUCT_*` lines into `.env.local`. The CLI never print
 
 ## Usage meters (tracking only — not billing)
 
-Meters answer “how much are people using Typefolio?” They do **not** change what customers pay. Checkout and renewals stay **flat** (Launch £20/yr, Pro when enabled). The app never attaches meters to products or creates usage-based prices.
+Meters answer “how much are people using Typefolio?” They do **not** change what customers pay. Checkout and renewals stay **flat** (Launch £14.99/yr, Pro when enabled). The app never attaches meters to products or creates usage-based prices.
 
 1. Token scopes: include **events** read/write for ingest + meters.
 2. Create meters in Polar: `npm run polar:meters -- ensure` (aggregation only — do not link meters to product prices in the Polar UI).

@@ -23,7 +23,7 @@ Polar production org **typefolio**. Flat subscriptions only — meters are **tra
 
 - [x] Marketing **`/pricing`** (`apps/marketing`) — reads `GET /api/billing/plans` from the product app
 - [x] In-app **Upgrade to Launch** — Settings → Account → `pro_launch` checkout
-- [x] Launch copy in `getPublicBillingPlans()` — £20/yr all-inclusive, grandfathered while subscribed
+- [x] Launch copy in `getPublicBillingPlans()` — £14.99/yr all-inclusive, grandfathered while subscribed
 
 ---
 
@@ -74,7 +74,7 @@ Token scopes: **products**, **checkouts**, **subscriptions**, **webhooks**, **ev
 Use a **100% Polar discount** or real card in a test account:
 
 1. [ ] Sign in on `app.typefolio.app`
-2. [ ] Settings → **Upgrade to Launch — £20/yr** (or `POST /api/billing/checkout` with `{ "priceId": "pro_launch" }`)
+2. [ ] Settings → **Upgrade to Launch — £14.99/yr** (or `POST /api/billing/checkout` with `{ "priceId": "pro_launch" }`)
 3. [ ] Complete Polar checkout → return URL `/?checkout=success`
 4. [ ] Polar webhook delivery **2xx** for subscription create/update
 5. [ ] `GET /api/me` → `entitlement.plan` is `pro`, `features.sync` is `true`, `isLaunchPricing` is `true` when applicable

@@ -11,7 +11,7 @@ export interface WelcomeThanksEmailProps {
 
 export function WelcomeThanksEmail({ firstName, founderName }: WelcomeThanksEmailProps) {
   const appOrigin = getAppOrigin();
-  const downloadsUrl = `${getMarketingOrigin()}/downloads`;
+  const downloadsUrl = `${getMarketingOrigin()}/?download=1`;
   const greeting = firstName ? `Hi ${firstName},` : "Hi there,";
 
   return (

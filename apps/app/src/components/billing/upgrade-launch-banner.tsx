@@ -5,6 +5,12 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 import { openBillingPortal, startBillingCheckout } from "@typefolio/core/api";
+import { getLaunchTrialDays } from "@typefolio/core/billing/polar-trial";
+import {
+  formatGbpPerYear,
+  formatGbpPerYearShort,
+  LAUNCH_PRICE_GBP,
+} from "@typefolio/core/billing/prices";
 
 import { Button } from "@/components/ui/button";
 import { useLibrary } from "@/components/library/library-provider";
@@ -20,6 +26,9 @@ export function UpgradeLaunchBanner({ compact = false }: { compact?: boolean }) 
 
   const onPolarTrial =
     entitlement.status === "trialing" && Boolean(entitlement.trialEndsAt);
+  const trialDays = getLaunchTrialDays();
+  const launchYearly = formatGbpPerYear(LAUNCH_PRICE_GBP);
+  const launchYearlyShort = formatGbpPerYearShort(LAUNCH_PRICE_GBP);
 
   const onUpgrade = async () => {
     setLoading(true);
@@ -40,7 +49,7 @@ export function UpgradeLaunchBanner({ compact = false }: { compact?: boolean }) 
   if (compact) {
     return (
       <Button size="sm" disabled={loading} onClick={() => void onUpgrade()}>
-        {loading ? "…" : onPolarTrial ? "Launch £20/yr" : "Start free trial"}
+        {loading ? "…" : onPolarTrial ? `Launch ${launchYearlyShort}` : "Start free trial"}
       </Button>
     );
   }
@@ -58,8 +67,8 @@ export function UpgradeLaunchBanner({ compact = false }: { compact?: boolean }) 
         </p>
         <p className="text-muted-foreground">
           {onPolarTrial
-            ? `Full access until ${relativeTime(entitlement.trialEndsAt)}, then £20/year via Polar.`
-            : "7-day free trial through Polar checkout, then £20/year all-inclusive (hosting & sync)."}
+            ? `Full access until ${relativeTime(entitlement.trialEndsAt)}, then ${launchYearly} via Polar.`
+            : `${trialDays}-day free trial through Polar checkout, then ${launchYearly} all-inclusive (hosting & sync).`}
         </p>
       </div>
       <div className="flex shrink-0 flex-wrap gap-2">

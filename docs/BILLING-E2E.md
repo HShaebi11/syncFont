@@ -8,7 +8,7 @@ Primary provider: **Polar** (web). Apple App Store notifications are optional (i
 2. `npm run polar:catalog -- verify` then `ensure` — set `POLAR_PRODUCT_LAUNCH` (and `POLAR_SERVER`).
 3. Forward webhooks to `http://127.0.0.1:43124/api/webhook/polar` (ngrok / cloudflared) **or** test on deployed `app.typefolio.app`.
 4. `npm run dev:app`, sign in.
-5. Settings → **Upgrade to Launch — £20/yr**, or `POST /api/billing/checkout` with `{ "priceId": "pro_launch" }`.
+5. Settings → **Upgrade to Launch — £14.99/yr**, or `POST /api/billing/checkout` with `{ "priceId": "pro_launch" }`.
 6. Complete Polar checkout.
 7. Confirm webhook **2xx** in Polar dashboard.
 8. `GET /api/me` → `entitlement.plan` is `pro`, `features.sync` is `true`.

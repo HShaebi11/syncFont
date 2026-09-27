@@ -4,6 +4,12 @@ import {
   PRO_STORAGE_LIMIT_BYTES,
 } from "@typefolio/core/entitlements";
 import { getLaunchTrialDays } from "@typefolio/core/billing/polar-trial";
+import {
+  formatGbpPerYear,
+  LAUNCH_PRICE_GBP,
+  PRO_ANNUAL_PRICE_GBP,
+  PRO_MONTHLY_PRICE_GBP,
+} from "@typefolio/core/billing/prices";
 import type { CheckoutPriceId } from "@typefolio/core/types";
 
 export function resolvePolarProductId(priceId: CheckoutPriceId): string | null {
@@ -41,17 +47,18 @@ export function getPublicBillingPlans(): {
 } {
   const launchActive = isLaunchOfferActive();
   const trialDays = getLaunchTrialDays();
+  const launchYearly = formatGbpPerYear(LAUNCH_PRICE_GBP);
 
   const launchPlan = {
     id: "pro_launch" as const,
     name: "Launch",
-    priceGbp: 20,
+    priceGbp: LAUNCH_PRICE_GBP,
     interval: "year" as const,
     storageLimitBytes: PRO_STORAGE_LIMIT_BYTES,
     deviceLimit: PRO_DEVICE_LIMIT,
     features: [
       `${trialDays}-day free trial (Polar)`,
-      "Then £20/year — hosting & sync included",
+      `Then ${launchYearly} — hosting & sync included`,
       "500 MB storage",
       "2 devices, auto-sync",
       "Locked in while you stay subscribed",
@@ -68,7 +75,7 @@ export function getPublicBillingPlans(): {
       launchOffer: {
         active: true,
         message:
-          `Start with a ${trialDays}-day free trial on Launch, then £20/year all-inclusive. Billing is handled by Polar.`,
+          `Start with a ${trialDays}-day free trial on Launch, then ${launchYearly} all-inclusive. Billing is handled by Polar.`,
       },
     };
   }
@@ -78,7 +85,7 @@ export function getPublicBillingPlans(): {
       {
         id: "pro_annual",
         name: "Pro",
-        priceGbp: 40,
+        priceGbp: PRO_ANNUAL_PRICE_GBP,
         interval: "year",
         storageLimitBytes: PRO_STORAGE_LIMIT_BYTES,
         deviceLimit: PRO_DEVICE_LIMIT,
@@ -88,8 +95,8 @@ export function getPublicBillingPlans(): {
       },
       {
         id: "pro_monthly",
-        name: "Pro Monthly",
-        priceGbp: 4.99,
+        name: "Monthly",
+        priceGbp: PRO_MONTHLY_PRICE_GBP,
         interval: "month",
         storageLimitBytes: PRO_STORAGE_LIMIT_BYTES,
         deviceLimit: PRO_DEVICE_LIMIT,
