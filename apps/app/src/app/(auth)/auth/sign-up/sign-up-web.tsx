@@ -20,7 +20,10 @@ export function SignUpWebPage({ initialVerify }: { initialVerify?: boolean }) {
   const [error, setError] = useState<string | null>(null);
 
   return (
-    <AuthCard title="Create account">
+    <AuthCard
+      title="Create an account"
+      description="Start a trial. Upload fonts once, then sync and install on Mac."
+    >
       <form
         className="space-y-4"
         onSubmit={async (event) => {

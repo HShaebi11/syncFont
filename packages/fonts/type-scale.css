@@ -1,0 +1,118 @@
+:root {
+  --tf-step--1: clamp(0.6875rem, 0.64rem + 0.18vw, 0.75rem);
+  --tf-step-0: clamp(0.75rem, 0.71rem + 0.2vw, 0.8125rem);
+  --tf-step-1: clamp(0.8125rem, 0.76rem + 0.28vw, 0.9375rem);
+  --tf-step-2: clamp(0.9375rem, 0.88rem + 0.32vw, 1.0625rem);
+  --tf-step-3: clamp(1.0625rem, 0.95rem + 0.55vw, 1.25rem);
+  --tf-step-4: clamp(1.75rem, 1.15rem + 2.1vw, 2.75rem);
+  --tf-step-5: clamp(2.35rem, 1.2rem + 4.1vw, 4.5rem);
+  --tf-step-aa: clamp(7.5rem, 6rem + 22vw, 20rem);
+  --tf-step-num: clamp(2.75rem, 1.6rem + 7vw, 6.5rem);
+
+  --tf-lh-display: 0.98;
+  --tf-lh-title: 1.04;
+  --tf-lh-heading: 1.2;
+  --tf-lh-body: 1.5;
+  --tf-lh-legal: 1.65;
+  --tf-lh-caps: 1.2;
+
+  --tf-track-display: -0.03em;
+  --tf-track-title: -0.025em;
+  --tf-track-heading: -0.015em;
+  --tf-track-body: 0;
+  --tf-track-caps: 0.16em;
+  --tf-track-meta: 0.02em;
+}
+
+.tf-display {
+  font-size: var(--tf-step-5);
+  line-height: var(--tf-lh-display);
+  letter-spacing: var(--tf-track-display);
+  font-weight: 400;
+}
+
+.tf-title {
+  font-size: var(--tf-step-4);
+  line-height: var(--tf-lh-title);
+  letter-spacing: var(--tf-track-title);
+  font-weight: 400;
+}
+
+.tf-heading {
+  font-size: var(--tf-step-3);
+  line-height: var(--tf-lh-heading);
+  letter-spacing: var(--tf-track-heading);
+  font-weight: 400;
+}
+
+.tf-lede {
+  font-size: var(--tf-step-2);
+  line-height: var(--tf-lh-body);
+  letter-spacing: var(--tf-track-body);
+  font-weight: 400;
+}
+
+.tf-body {
+  font-size: var(--tf-step-2);
+  line-height: var(--tf-lh-legal);
+  letter-spacing: var(--tf-track-body);
+  font-weight: 400;
+}
+
+.tf-button {
+  font-size: var(--tf-step-1);
+  line-height: 1;
+  letter-spacing: var(--tf-track-body);
+  font-weight: 400;
+}
+
+.tf-meta {
+  font-size: var(--tf-step-0);
+  line-height: var(--tf-lh-caps);
+  letter-spacing: var(--tf-track-meta);
+  font-weight: 400;
+}
+
+.tf-logo {
+  font-size: var(--tf-step-0);
+  line-height: var(--tf-lh-caps);
+  letter-spacing: var(--tf-track-caps);
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+.tf-kicker {
+  font-size: var(--tf-step--1);
+  line-height: var(--tf-lh-caps);
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 400;
+}
+
+.tf-small {
+  font-size: var(--tf-step-0);
+  line-height: var(--tf-lh-caps);
+  letter-spacing: var(--tf-track-meta);
+  font-weight: 400;
+}
+
+.tf-specimen-aa {
+  font-size: var(--tf-step-aa);
+  line-height: 0.8;
+  letter-spacing: -0.05em;
+  font-weight: 400;
+}
+
+.tf-specimen-num {
+  font-size: var(--tf-step-num);
+  line-height: 0.9;
+  letter-spacing: -0.04em;
+  font-weight: 700;
+}
+
+.tf-specimen-meta {
+  font-size: var(--tf-step-1);
+  line-height: 1.2;
+  letter-spacing: 0.04em;
+  font-weight: 400;
+}

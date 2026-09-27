@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 
+import { brandFontClassName } from "@/lib/fonts";
+
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -14,11 +16,10 @@ export default function MarketingLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang="en" className={brandFontClassName}>
       <body
         style={{
           margin: 0,
-          fontFamily: "ui-sans-serif, system-ui, sans-serif",
           color: "#fff",
           background: "#000",
         }}

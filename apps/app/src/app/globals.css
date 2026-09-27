@@ -1,6 +1,7 @@
 @import "tailwindcss";
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
+@import "../../../../packages/fonts/type-scale.css";
 
 @custom-variant dark (&:is(.dark *));
 
@@ -127,4 +128,93 @@
   body {
     @apply bg-background text-foreground;
   }
+}
+
+.tf-logo,
+.tf-small,
+.tf-kicker,
+.tf-meta,
+.tf-button,
+.tf-lede,
+.tf-body,
+.tf-heading,
+.tf-title,
+.tf-display,
+.tf-specimen-meta {
+  font-family: var(--font-montreal-mono), ui-monospace, monospace;
+}
+
+.tf-editorial,
+.tf-specimen-aa,
+.tf-specimen-num {
+  font-family: var(--font-editorial), ui-serif, Georgia, serif;
+}
+
+@media (max-width: 720px) {
+  .auth-split {
+    grid-template-columns: 1fr !important;
+  }
+
+  .auth-specimen {
+    display: none !important;
+  }
+}
+
+@media (min-width: 721px) {
+  .auth-legal {
+    right: 50%;
+  }
+}
+
+.auth-form label {
+  color: #a3a3a3;
+  font-family: var(--font-montreal-mono), ui-monospace, monospace;
+  font-size: var(--tf-step-0);
+}
+
+.auth-form input {
+  height: 2.75rem;
+  border: 1px solid #525252;
+  border-radius: 999px;
+  background: transparent;
+  color: #fff;
+  box-shadow: none;
+  font-size: var(--tf-step-1);
+}
+
+.auth-form button[type="submit"] {
+  height: 2.75rem;
+  border-radius: 999px;
+  background: #fff;
+  color: #000;
+  font-weight: 400;
+  font-size: var(--tf-step-1);
+}
+
+.auth-form input::placeholder {
+  color: #737373;
+}
+
+.auth-form input:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 1px #fff;
+  border-color: #fff;
+}
+
+.auth-form button[type="submit"]:hover {
+  background: #e5e5e5;
+}
+
+.auth-form a {
+  color: #a3a3a3;
+}
+
+.auth-form .text-muted-foreground {
+  color: #737373;
+}
+
+.auth-form [data-slot="alert"] {
+  background: transparent;
+  color: #d4d4d4;
+  border-color: #525252;
 }

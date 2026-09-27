@@ -66,7 +66,7 @@ function SignInForm() {
 
 export default function SignInPage() {
   return (
-    <AuthCard title="Sign in">
+    <AuthCard title="Sign in" description="Same account on the web and on Mac.">
       <Suspense>
         <SignInForm />
       </Suspense>

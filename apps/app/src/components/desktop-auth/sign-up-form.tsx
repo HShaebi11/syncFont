@@ -35,7 +35,7 @@ export function SignUpForm({
 
   if (showVerifyNotice) {
     return (
-      <p style={{ fontSize: "0.9375rem", color: "#525252", margin: 0 }}>
+      <p style={{ fontSize: "0.9375rem", color: "#a3a3a3", margin: 0 }}>
         Check your email to verify your account, then sign in from the Typefolio app again.
       </p>
     );
@@ -102,12 +102,12 @@ export function SignUpForm({
         {redirectUri ? (
           <Link
             href={`/auth/desktop?redirect_uri=${encodeURIComponent(redirectUri)}`}
-            style={{ color: "#171717", fontWeight: 500 }}
+            style={{ color: "#fff", fontWeight: 400 }}
           >
             Sign in
           </Link>
         ) : (
-          <Link href="/auth/desktop" style={{ color: "#171717", fontWeight: 500 }}>
+          <Link href="/auth/desktop" style={{ color: "#fff", fontWeight: 400 }}>
             Desktop sign-in
           </Link>
         )}
