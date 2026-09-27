@@ -12,7 +12,7 @@ import {
   mutedLink,
   primaryButton,
   secondaryButton,
-} from "@/components/auth-shell";
+} from "@/components/desktop-auth/auth-shell";
 import { authClient } from "@typefolio/core/auth/client";
 
 interface DesktopSignInFormProps {

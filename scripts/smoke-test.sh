@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-BASE_URL="${1:-http://127.0.0.1:43123}"
+BASE_URL="${1:-http://127.0.0.1:43124}"
 ROOT_DIR="$(cd "$(dirname "$0")/.." && pwd)"
 COOKIE_JAR="$(mktemp)"
 TEST_EMAIL="typefolio-test-$(date +%s)@example.com"
@@ -18,7 +18,7 @@ echo
 
 PREFLIGHT_STATUS="$(curl -s -o /dev/null -w '%{http_code}' "$BASE_URL/api/billing/plans" 2>/dev/null || echo 000)"
 if [[ "$PREFLIGHT_STATUS" == "000" ]]; then
-  echo "ERROR: Cannot reach $BASE_URL — start API with: npm run dev:api"
+  echo "ERROR: Cannot reach $BASE_URL — start app with: npm run dev:app"
   exit 1
 fi
 

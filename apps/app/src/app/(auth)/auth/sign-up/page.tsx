@@ -1,80 +1,35 @@
-"use client";
+import { isAllowedDesktopRedirectUri } from "@typefolio/core/desktop-auth";
 
-import Link from "next/link";
-import { useState } from "react";
+import { AuthShell } from "@/components/desktop-auth/auth-shell";
+import { SignUpForm } from "@/components/desktop-auth/sign-up-form";
 
-import { AuthCard } from "@/components/auth/auth-card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import { authClient } from "@/lib/auth-client";
+import { SignUpWebPage } from "./sign-up-web";
 
-export default function SignUpPage() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
-  const [message, setMessage] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+export const dynamic = "force-dynamic";
 
-  return (
-    <AuthCard title="Create account">
-      <form
-        className="space-y-4"
-        onSubmit={async (event) => {
-          event.preventDefault();
-          const result = await authClient.signUp.email({ email, password, name });
-          if (result.error) {
-            setError(result.error.message ?? "Could not create account.");
-            return;
-          }
-          setError(null);
-          setMessage("Check your email to verify your account.");
-        }}
+interface SignUpPageProps {
+  searchParams: Promise<{ redirect_uri?: string; verify?: string }>;
+}
+
+export default async function SignUpPage({ searchParams }: SignUpPageProps) {
+  const { redirect_uri: redirectUri, verify } = await searchParams;
+  const safeRedirectUri =
+    redirectUri && isAllowedDesktopRedirectUri(redirectUri) ? redirectUri : undefined;
+
+  if (safeRedirectUri) {
+    return (
+      <AuthShell
+        title={verify === "1" ? "Check your email" : "Create account"}
+        description={
+          verify === "1"
+            ? "Verify your email to sync fonts with the Mac or iPad app."
+            : "Create an account for Typefolio sync."
+        }
       >
-        <div className="space-y-2">
-          <Label htmlFor="name">Name</Label>
-          <Input id="name" value={name} onChange={(event) => setName(event.target.value)} required />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="email">Email</Label>
-          <Input
-            id="email"
-            type="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            required
-          />
-        </div>
-        <div className="space-y-2">
-          <Label htmlFor="password">Password</Label>
-          <Input
-            id="password"
-            type="password"
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            required
-          />
-        </div>
-        {error ? (
-          <Alert variant="destructive">
-            <AlertDescription>{error}</AlertDescription>
-          </Alert>
-        ) : null}
-        {message ? (
-          <Alert>
-            <AlertDescription>{message}</AlertDescription>
-          </Alert>
-        ) : null}
-        <Button className="w-full" type="submit">
-          Create account
-        </Button>
-      </form>
-      <p className="text-sm text-muted-foreground">
-        <Link href="/auth/sign-in" className="underline">
-          Already have an account
-        </Link>
-      </p>
-    </AuthCard>
-  );
+        <SignUpForm redirectUri={safeRedirectUri} showVerifyNotice={verify === "1"} />
+      </AuthShell>
+    );
+  }
+
+  return <SignUpWebPage initialVerify={verify === "1"} />;
 }

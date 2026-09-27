@@ -3,23 +3,23 @@
   "version": "0.1.0",
   "private": true,
   "workspaces": [
-    "apps/api",
     "apps/app",
     "apps/marketing",
     "packages/core"
   ],
   "scripts": {
     "dev": "turbo run dev",
-    "dev:api": "npm run dev -w @typefolio/api",
+    "dev:api": "npm run dev:app",
     "dev:app": "npm run dev -w @typefolio/app",
     "dev:marketing": "npm run dev -w @typefolio/marketing",
     "dev:native": "bash scripts/dev-all.sh",
     "build": "turbo run build",
-    "start": "npm run start -w @typefolio/api",
+    "start": "npm run start -w @typefolio/app",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
     "db:push": "dotenv -e .env.local -- npm run db:push -w @typefolio/core",
     "check:env": "dotenv -e .env.local -- tsx scripts/check-env.ts",
+    "vercel:env:sync": "dotenv -e .env.local -- bash scripts/sync-typefolio-vercel-env.sh",
     "smoke": "bash scripts/smoke-test.sh",
     "test": "npm run test -w @typefolio/core"
   },
@@ -29,5 +29,11 @@
     "turbo": "^2.5.8",
     "typescript": "^5"
   },
-  "packageManager": "npm@10.9.2"
+  "packageManager": "npm@10.9.2",
+  "allowScripts": {
+    "esbuild@0.18.20": true,
+    "esbuild@0.25.12": true,
+    "esbuild@0.28.2": true,
+    "electron@31.7.7": true
+  }
 }

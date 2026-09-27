@@ -14,8 +14,7 @@ Decisions from product strategy planning (Sep 2026). This doc is the source of t
 | Domain | Status | Notes |
 |--------|--------|-------|
 | `typefolio.app` | Available (~$9.99/yr on Vercel) | **Marketing** site (landing, pricing, legal) |
-| `app.typefolio.app` | Subdomain on same zone | **Product** (auth, library, billing UI) |
-| `api.typefolio.app` | Subdomain on same zone | **API** + webhooks + native clients |
+| `app.typefolio.app` | Subdomain on same zone | **Product** UI + `/api/*` + webhooks + `/auth/desktop` |
 | `admin.typefolio.app` | Subdomain (later) | Founder console |
 | `typefolio.com` | Taken | — |
 | `gettypefolio.com` | Available (~$11.25/yr) | Optional redirect → `typefolio.app` |

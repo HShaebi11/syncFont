@@ -7,3 +7,10 @@ This version has breaking changes — APIs, conventions, and file structure may 
 This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
 
 <!-- END:nextjs-agent-rules -->
+
+## Agent boundaries (Typefolio)
+
+- **Business logic** — `packages/core/` (DB, auth, billing, storage, entitlements). Implement here first.
+- **HTTP routes, webhooks, `/auth/desktop`** — `apps/app/src/app/` only. Do not add API routes elsewhere.
+- **Marketing** — `apps/marketing/` only. No `DATABASE_URL`, Polar secrets, or Apple keys on marketing.
+- **Clients** — `apps/typefolio-desktop/`, `apps/typefolio-native/`; API base URL is the product app host (`app.typefolio.app` in production).

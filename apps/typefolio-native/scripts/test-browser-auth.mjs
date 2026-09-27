@@ -3,7 +3,7 @@
 import http from "node:http";
 import { URL } from "node:url";
 
-const API = process.env.SYNCFONT_API_URL ?? "http://127.0.0.1:43123";
+const API = process.env.SYNCFONT_API_URL ?? "http://127.0.0.1:43124";
 const EMAIL = process.env.SYNCFONT_TEST_EMAIL ?? "syncfont-demo@example.com";
 const PASS = process.env.SYNCFONT_TEST_PASSWORD ?? "SyncFontDemo123!";
 

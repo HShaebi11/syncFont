@@ -1,9 +1,30 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalPassThroughEnv": [
+    "BETTER_AUTH_SECRET",
+    "BETTER_AUTH_URL",
+    "DATABASE_URL",
+    "DATABASE_URL_UNPOOLED",
+    "BLOB_READ_WRITE_TOKEN",
+    "NEXT_PUBLIC_API_URL",
+    "NEXT_PUBLIC_APP_URL",
+    "NEXT_PUBLIC_MARKETING_URL",
+    "NEON_AUTH_COOKIE_SECRET",
+    "NEON_AUTH_BASE_URL",
+    "RESEND_API_KEY",
+    "RESEND_FROM_EMAIL",
+    "POLAR_ACCESS_TOKEN",
+    "POLAR_WEBHOOK_SECRET",
+    "POLAR_SERVER",
+    "GOOGLE_CLIENT_ID",
+    "GOOGLE_CLIENT_SECRET",
+    "DESKTOP_BLOB_PUBLIC_ORIGIN",
+    "DESKTOP_MANIFEST_URL"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".next/**", "!.next/cache/**"]
+      "outputs": [".next/**", "!.next/cache/**", "dist/**", "out/**"]
     },
     "dev": {
       "cache": false,

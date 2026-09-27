@@ -3,7 +3,7 @@
 ## Stripe (local)
 
 1. Set env from [`.env.example`](../.env.example).
-2. Forward webhooks: `stripe listen --forward-to localhost:43123/api/webhooks/stripe`
+2. Forward webhooks: `stripe listen --forward-to localhost:43124/api/webhooks/stripe`
 3. Sign in, `POST /api/billing/checkout` with `{ "priceId": "pro_launch" }`, complete Checkout.
 4. Confirm `GET /api/me` → `entitlement.plan` is `pro` and `features.sync` is true.
 5. `GET /api/libraries/:id/manifest` with bearer token → 200 (was 403 on Free).

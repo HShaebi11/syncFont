@@ -12,11 +12,17 @@ export function FontGrid({
   selected,
   onSelect,
   columns = 4,
+  view: _view = "grid",
+  previewText: _previewText,
+  previewSize: _previewSize,
 }: {
   families: FontFamilyGroup[];
   selected: string[];
   onSelect: (slug: string, additive: boolean) => void;
   columns?: number;
+  view?: "grid" | "list" | "compact";
+  previewText?: string;
+  previewSize?: number;
 }) {
   const parentRef = useRef<HTMLDivElement>(null);
   const rows = Math.ceil(families.length / columns);
