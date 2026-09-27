@@ -10,7 +10,7 @@ import {
   LAUNCH_PRICE_GBP,
 } from "@typefolio/core/billing/prices";
 
-import { marketingDownloadsUrl } from "@/lib/marketing";
+import { marketingDownloadsUrl, marketingLegalUrl } from "@/lib/marketing";
 import { SignOutButton } from "@/components/sign-out-button";
 import { useLibrary } from "@/components/library/library-provider";
 import { Button } from "@/components/ui/button";
@@ -136,6 +136,17 @@ export default function SettingsPage() {
                 title="Session"
                 description="Sign out of this browser."
                 control={<SignOutButton />}
+              />
+              <SettingRow
+                title="Legal"
+                description="Privacy, terms, cookies, and refunds."
+                control={
+                  <Button variant="outline" asChild>
+                    <a href={marketingLegalUrl("/legal")} target="_blank" rel="noopener noreferrer">
+                      View
+                    </a>
+                  </Button>
+                }
               />
             </CardContent>
           </Card>

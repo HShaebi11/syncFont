@@ -78,7 +78,7 @@ export function DesktopSignInForm({ redirectUri }: DesktopSignInFormProps) {
         No account?{" "}
         <Link
           href={`/auth/sign-up?redirect_uri=${encodeURIComponent(redirectUri)}`}
-          style={{ color: "#171717", fontWeight: 500 }}
+          style={{ color: "#fff", fontWeight: 400 }}
         >
           Create one
         </Link>

@@ -8,6 +8,10 @@ const nextConfig: NextConfig = {
     return [
       { source: "/pricing", destination: "/", permanent: true },
       { source: "/downloads", destination: "/?download=1", permanent: false },
+      { source: "/privacy", destination: "/legal/privacy", permanent: true },
+      { source: "/terms", destination: "/legal/terms", permanent: true },
+      { source: "/cookies", destination: "/legal/cookies", permanent: true },
+      { source: "/refunds", destination: "/legal/refunds", permanent: true },
     ];
   },
   async rewrites() {

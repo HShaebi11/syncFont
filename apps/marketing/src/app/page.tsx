@@ -5,6 +5,7 @@ import { formatGbpPerYearShort, LAUNCH_PRICE_GBP, PRO_ANNUAL_PRICE_GBP } from "@
 import { isLaunchOfferActive } from "@typefolio/core/entitlements";
 
 import { DownloadDesktop } from "@/components/download-desktop";
+import { HomeLegalLinks } from "@/components/legal-chrome";
 import { apiUrl, getDesktopDownloads } from "@/lib/site";
 
 export const metadata: Metadata = {
@@ -57,17 +58,7 @@ export default async function MarketingHomePage({
           mixBlendMode: "difference",
         }}
       >
-        <p
-          style={{
-            margin: 0,
-            fontFamily: "ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace",
-            fontSize: "0.8125rem",
-            fontWeight: 600,
-            letterSpacing: "0.18em",
-            textTransform: "uppercase",
-            color: "#fff",
-          }}
-        >
+        <p className="tf-logo" style={{ margin: 0, color: "#fff" }}>
           Typefolio
         </p>
       </header>
@@ -91,33 +82,17 @@ export default async function MarketingHomePage({
             minWidth: 0,
           }}
         >
-          <h1
-            style={{
-              margin: 0,
-              fontSize: "clamp(2.25rem, 6vw, 4.75rem)",
-              fontWeight: 560,
-              letterSpacing: "-0.045em",
-              lineHeight: 0.95,
-              maxWidth: "11ch",
-            }}
-          >
+          <h1 className="tf-display" style={{ margin: 0, maxWidth: "11ch" }}>
             Your fonts, on every device.
           </h1>
-          <p
-            style={{
-              margin: 0,
-              fontSize: "clamp(0.95rem, 1.4vw, 1.125rem)",
-              lineHeight: 1.5,
-              color: "#a3a3a3",
-              maxWidth: "32rem",
-            }}
-          >
+          <p className="tf-lede" style={{ margin: 0, color: "#a3a3a3", maxWidth: "32rem" }}>
             Upload .ttf, .otf, .woff, and .woff2 once. Sync and install on Mac now — Windows, Linux,
             and iPad are coming soon. A utility for fonts you already own.
           </p>
           <div style={{ display: "flex", flexWrap: "wrap", alignItems: "center", gap: "0.75rem" }}>
             <a
               href={apiUrl("/auth/sign-up")}
+              className="tf-button"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -125,8 +100,6 @@ export default async function MarketingHomePage({
                 background: "#fff",
                 color: "#000",
                 textDecoration: "none",
-                fontWeight: 600,
-                fontSize: "0.9375rem",
                 padding: "0.85rem 1.4rem",
                 borderRadius: "999px",
                 border: "1px solid #fff",
@@ -136,6 +109,7 @@ export default async function MarketingHomePage({
             </a>
             <a
               href={apiUrl("/auth/desktop")}
+              className="tf-button"
               style={{
                 display: "inline-flex",
                 alignItems: "center",
@@ -143,8 +117,6 @@ export default async function MarketingHomePage({
                 background: "transparent",
                 color: "#fff",
                 textDecoration: "none",
-                fontWeight: 600,
-                fontSize: "0.9375rem",
                 padding: "0.85rem 1.4rem",
                 borderRadius: "999px",
                 border: "1px solid #fff",
@@ -159,7 +131,9 @@ export default async function MarketingHomePage({
               autoOpen={params.download === "1"}
             />
           </div>
-          <p style={{ margin: 0, fontSize: "0.8125rem", color: "#737373" }}>{proof}</p>
+          <p className="tf-meta" style={{ margin: 0, color: "#737373" }}>
+            {proof}
+          </p>
         </div>
 
         <aside
@@ -175,16 +149,12 @@ export default async function MarketingHomePage({
           }}
         >
           <p
+            className="tf-specimen-aa"
             style={{
               margin: 0,
               position: "absolute",
               top: "-4%",
               left: "-4%",
-              fontFamily: "ui-serif, Georgia, 'Times New Roman', serif",
-              fontSize: "clamp(10rem, 32vw, 22rem)",
-              fontWeight: 400,
-              lineHeight: 0.8,
-              letterSpacing: "-0.06em",
               color: "#000",
               userSelect: "none",
             }}
@@ -192,16 +162,12 @@ export default async function MarketingHomePage({
             Aa
           </p>
           <p
+            className="tf-specimen-num"
             style={{
               margin: 0,
               position: "absolute",
               bottom: "8%",
               right: "-2%",
-              fontFamily: "ui-sans-serif, system-ui, sans-serif",
-              fontSize: "clamp(3.5rem, 9vw, 7.5rem)",
-              fontWeight: 700,
-              letterSpacing: "-0.05em",
-              lineHeight: 0.9,
               color: "#000",
               userSelect: "none",
             }}
@@ -209,14 +175,12 @@ export default async function MarketingHomePage({
             123
           </p>
           <p
+            className="tf-specimen-meta"
             style={{
               margin: 0,
               position: "absolute",
               top: "52%",
               left: "10%",
-              fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
-              fontSize: "clamp(0.9rem, 1.6vw, 1.15rem)",
-              letterSpacing: "0.04em",
               color: "#000",
               userSelect: "none",
             }}
@@ -224,6 +188,18 @@ export default async function MarketingHomePage({
             .ttf  .otf  .woff2
           </p>
         </aside>
+      </div>
+      <div
+        className="home-legal"
+        style={{
+          position: "absolute",
+          left: 0,
+          bottom: 0,
+          zIndex: 2,
+          padding: "1.25rem 1.75rem",
+        }}
+      >
+        <HomeLegalLinks />
       </div>
     </section>
   );

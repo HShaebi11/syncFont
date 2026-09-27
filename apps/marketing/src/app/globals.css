@@ -1,8 +1,31 @@
+@import "../../../../packages/fonts/type-scale.css";
+
 html,
 body {
   margin: 0;
   background: #000;
   color: #fff;
+  font-weight: 400;
+}
+
+.tf-logo,
+.tf-small,
+.tf-kicker,
+.tf-meta,
+.tf-button,
+.tf-lede,
+.tf-body,
+.tf-heading,
+.tf-title,
+.tf-display,
+.tf-specimen-meta {
+  font-family: var(--font-montreal-mono), ui-monospace, monospace;
+}
+
+.tf-editorial,
+.tf-specimen-aa,
+.tf-specimen-num {
+  font-family: var(--font-editorial), ui-serif, Georgia, serif;
 }
 
 @media (max-width: 720px) {
@@ -12,5 +35,11 @@ body {
 
   .home-specimen {
     display: none !important;
+  }
+}
+
+@media (min-width: 721px) {
+  .home-legal {
+    right: 50%;
   }
 }
