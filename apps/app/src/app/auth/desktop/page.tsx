@@ -5,8 +5,8 @@ import { redirect } from "next/navigation";
 import {
   DesktopSignInForm,
   DesktopSignInShell,
-} from "@/components/desktop-sign-in-form";
-import { AuthShell, primaryButton } from "@/components/auth-shell";
+} from "@/components/desktop-auth/desktop-sign-in-form";
+import { AuthShell, primaryButton } from "@/components/desktop-auth/auth-shell";
 import { auth } from "@typefolio/core/auth/server";
 import { getSessionCookieName } from "@typefolio/core/auth/config";
 import {
@@ -31,8 +31,16 @@ export default async function DesktopAuthPage({ searchParams }: DesktopAuthPageP
         title="Desktop sign-in"
         description="This page is opened by the Typefolio app. The callback URL is missing or invalid."
       >
-        <Link href="/" style={{ ...primaryButton, display: "inline-block", textAlign: "center", textDecoration: "none" }}>
-          Back to API home
+        <Link
+          href="/"
+          style={{
+            ...primaryButton,
+            display: "inline-block",
+            textAlign: "center",
+            textDecoration: "none",
+          }}
+        >
+          Back to Typefolio
         </Link>
       </AuthShell>
     );

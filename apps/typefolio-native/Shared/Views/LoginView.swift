@@ -8,7 +8,7 @@ struct LoginView: View {
     @State private var showError = false
     #if os(iOS)
     @State private var showEmailSignIn = false
-    @State private var apiBaseURL = "http://127.0.0.1:43123"
+    @State private var apiBaseURL = "http://127.0.0.1:43124"
     @State private var email = ""
     @State private var password = ""
     #endif
@@ -35,7 +35,7 @@ struct LoginView: View {
                         Text("API URL")
                             .font(.caption)
                             .foregroundStyle(.secondary)
-                        TextField("http://127.0.0.1:43123", text: $apiBaseURL)
+                        TextField("http://127.0.0.1:43124", text: $apiBaseURL)
                             .textInputAutocapitalization(.never)
                             .autocorrectionDisabled()
                             .textFieldStyle(.roundedBorder)

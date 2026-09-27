@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useActionState } from "react";
 
-import { signUpWithEmail } from "@/app/auth/sign-up/actions";
+import { signUpWithEmail } from "@/app/(auth)/auth/sign-up/actions";
 import {
   errorText,
   fieldInput,
@@ -11,7 +11,7 @@ import {
   mutedLink,
   primaryButton,
   secondaryButton,
-} from "@/components/auth-shell";
+} from "@/components/desktop-auth/auth-shell";
 import { authClient } from "@typefolio/core/auth/client";
 
 export function SignUpForm({

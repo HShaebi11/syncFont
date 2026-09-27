@@ -18,7 +18,7 @@ final class SyncService: ObservableObject {
     private var apiBaseURL: URL
 
     init(
-        apiBaseURL: URL = URL(string: "http://127.0.0.1:43123")!,
+        apiBaseURL: URL = URL(string: "http://127.0.0.1:43124")!,
         fontInstaller: FontInstalling,
         scheduler: SyncScheduling
     ) {

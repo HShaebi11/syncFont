@@ -24,7 +24,7 @@ export function getAuthBaseUrl(): string {
   if (api) {
     return api.replace(/\/$/, "");
   }
-  return "http://127.0.0.1:43123";
+  return "http://127.0.0.1:43124";
 }
 
 export function getPublicApiBase(): string {

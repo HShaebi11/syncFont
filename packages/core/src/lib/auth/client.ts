@@ -7,6 +7,6 @@ export const authClient = createAuthClient({
   baseURL:
     process.env.NEXT_PUBLIC_API_URL?.replace(/\/$/, "") ||
     process.env.BETTER_AUTH_URL?.replace(/\/$/, "") ||
-    "http://127.0.0.1:43123",
+    "http://127.0.0.1:43124",
   plugins: [passkeyClient()],
 });

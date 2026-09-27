@@ -2,7 +2,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-PORT="${SYNCFONT_PORT:-43123}"
+PORT="${SYNCFONT_PORT:-43124}"
 HOST="${SYNCFONT_HOST:-127.0.0.1}"
 BASE_URL="http://${HOST}:${PORT}"
 APP_DIR="${ROOT_DIR}/apps/typefolio-native"
@@ -82,10 +82,10 @@ fi
 
 stop_port "$PORT"
 
-log "Starting Next.js API on ${BASE_URL}…"
+log "Starting Typefolio app on ${BASE_URL}…"
 (
   cd "$ROOT_DIR"
-  npm run dev:api
+  npm run dev:app
 ) &
 NEXT_PID=$!
 

@@ -10,6 +10,7 @@
     "lint": "eslint"
   },
   "dependencies": {
+    "@polar-sh/nextjs": "^0.9.6",
     "@better-auth/passkey": "^1.7.6",
     "@tanstack/react-virtual": "^3.13.12",
     "@typefolio/core": "*",
