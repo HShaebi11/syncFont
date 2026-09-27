@@ -387,6 +387,27 @@ export const billingEvents = pgTable(
   ],
 );
 
+export const usageHourly = pgTable(
+  "usage_hourly",
+  {
+    userId: text("user_id").notNull(),
+    bucketHour: timestamptz("bucket_hour").notNull(),
+    metric: text("metric").notNull(),
+    count: integer("count").notNull().default(0),
+    sumValue: integer("sum_value").notNull().default(0),
+  },
+  (table) => [
+    uniqueIndex("usage_hourly_user_bucket_metric_idx").on(
+      table.userId,
+      table.bucketHour,
+      table.metric,
+    ),
+    index("usage_hourly_bucket_hour_idx").on(table.bucketHour),
+    index("usage_hourly_metric_idx").on(table.metric),
+  ],
+);
+
 export type SubscriptionRow = typeof subscriptions.$inferSelect;
 export type BillingEventRow = typeof billingEvents.$inferSelect;
 export type UserProfileRow = typeof userProfiles.$inferSelect;
+export type UsageHourlyRow = typeof usageHourly.$inferSelect;

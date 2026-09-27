@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 
 import { requireLibraryOwner, requireSyncEntitlement } from "@typefolio/core/access";
 import { getLibraryManifest } from "@typefolio/core/manifest";
+import { USAGE_EVENT } from "@typefolio/core/usage/events";
+import { recordUsage } from "@typefolio/core/usage/record";
 
 interface RouteContext {
   params: Promise<{ id: string }>;
@@ -27,6 +29,8 @@ export async function GET(request: Request, context: RouteContext) {
   if (!manifest) {
     return NextResponse.json({ error: "Library not found." }, { status: 404 });
   }
+
+  recordUsage(access.userId, USAGE_EVENT.syncManifest);
 
   return NextResponse.json({ manifest });
 }

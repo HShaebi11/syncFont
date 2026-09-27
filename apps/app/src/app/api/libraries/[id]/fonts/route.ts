@@ -3,6 +3,8 @@ import { NextResponse } from "next/server";
 import { requireLibraryOwner } from "@typefolio/core/access";
 import { checkRateLimit } from "@typefolio/core/rate-limit";
 import { addFontsToLibrary } from "@typefolio/core/storage";
+import { USAGE_EVENT } from "@typefolio/core/usage/events";
+import { recordUsage } from "@typefolio/core/usage/record";
 
 interface RouteContext {
   params: Promise<{ id: string }>;
@@ -63,6 +65,11 @@ export async function POST(request: Request, context: RouteContext) {
 
   try {
     const result = await addFontsToLibrary(id, files);
+    const uploadBytes = files.reduce((total, file) => total + file.size, 0);
+    recordUsage(access.userId, USAGE_EVENT.fontUpload, {
+      count: files.length,
+      sumValue: uploadBytes,
+    });
     return NextResponse.json({
       library: result.library,
       added: result.added.length,

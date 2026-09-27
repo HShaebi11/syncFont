@@ -42,6 +42,9 @@ export default function MarketingHomePage() {
         <a href={apiUrl("/auth/sign-up")} style={primaryLink}>
           Create account
         </a>
+        <Link href="/pricing" style={secondaryLink}>
+          Pricing
+        </Link>
         <Link href="/downloads" style={secondaryLink}>
           Download desktop app
         </Link>

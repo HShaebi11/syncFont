@@ -1,10 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { toast } from "sonner";
 import { FolderIcon, HeartIcon, HomeIcon, RefreshCwIcon, SearchIcon } from "lucide-react";
 
+import { UpgradeLaunchBanner } from "@/components/billing/upgrade-launch-banner";
 import { LibraryProvider, useLibrary } from "@/components/library/library-provider";
 import { SearchOverlay } from "@/components/search/search-overlay";
 import { authClient } from "@/lib/auth-client";
@@ -95,12 +97,22 @@ function ShellInner({ children }: { children: React.ReactNode }) {
   const [searchOpen, setSearchOpen] = useState(false);
   const pathname = usePathname();
   const router = useRouter();
-  const { offline, devices } = useLibrary();
+  const searchParams = useSearchParams();
+  const { offline, devices, refresh } = useLibrary();
   const latestSync = devices
     .map((device) => device.lastSyncAt)
     .filter(Boolean)
     .sort()
     .at(-1);
+
+  useEffect(() => {
+    if (searchParams.get("checkout") !== "success") {
+      return;
+    }
+    toast.success("Welcome to Typefolio Launch — sync is now enabled.");
+    void refresh();
+    router.replace(pathname);
+  }, [searchParams, pathname, router, refresh]);
 
   useEffect(() => {
     let pendingG = false;
@@ -165,6 +177,7 @@ function ShellInner({ children }: { children: React.ReactNode }) {
           <kbd className="ml-auto text-xs">⌘K</kbd>
         </Button>
         <div className="ml-auto flex items-center gap-2">
+          <UpgradeLaunchBanner compact />
           <SyncStatus latestSync={latestSync} />
           <Button
             variant="ghost"

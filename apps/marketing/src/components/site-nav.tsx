@@ -1,22 +1,21 @@
 import Link from "next/link";
 
-import { navLink, siteNav } from "@/lib/styles";
+import { navLink, navLinkActive, siteNav } from "@/lib/styles";
 
-export function SiteNav({ active }: { active: "home" | "downloads" }) {
+type NavKey = "home" | "downloads" | "pricing";
+
+export function SiteNav({ active }: { active: NavKey }) {
+  const linkStyle = (key: NavKey) => (active === key ? navLinkActive : navLink);
+
   return (
     <nav style={siteNav} aria-label="Site">
-      <Link
-        href="/"
-        style={active === "home" ? { ...navLink, color: "#171717", fontWeight: 500 } : navLink}
-      >
+      <Link href="/" style={linkStyle("home")}>
         Home
       </Link>
-      <Link
-        href="/downloads"
-        style={
-          active === "downloads" ? { ...navLink, color: "#171717", fontWeight: 500 } : navLink
-        }
-      >
+      <Link href="/pricing" style={linkStyle("pricing")}>
+        Pricing
+      </Link>
+      <Link href="/downloads" style={linkStyle("downloads")}>
         Downloads
       </Link>
     </nav>

@@ -18,7 +18,10 @@ function getPolarAccessToken(): string | null {
 
 function getPolarServer(): "sandbox" | "production" {
   const value = process.env.POLAR_SERVER?.trim().toLowerCase();
-  return value === "production" ? "production" : "sandbox";
+  if (value === "sandbox") {
+    return "sandbox";
+  }
+  return "production";
 }
 
 export function getPolarClient(): Polar | null {
@@ -46,6 +49,13 @@ export function validateCheckoutPriceId(priceId: unknown): {
   }
 
   if (priceId === "pro_launch" && !isLaunchOfferActive()) {
+    return { ok: false, reason: "unavailable" };
+  }
+
+  if (
+    isLaunchOfferActive() &&
+    (priceId === "pro_annual" || priceId === "pro_monthly")
+  ) {
     return { ok: false, reason: "unavailable" };
   }
 

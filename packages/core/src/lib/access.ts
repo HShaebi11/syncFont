@@ -73,6 +73,44 @@ export async function getSessionUser(
   };
 }
 
+export function getAdminUserIds(): Set<string> {
+  const raw = process.env.ADMIN_USER_IDS?.trim();
+  if (!raw) {
+    return new Set();
+  }
+
+  return new Set(
+    raw
+      .split(",")
+      .map((id) => id.trim())
+      .filter(Boolean),
+  );
+}
+
+export async function requireAdmin(
+  request?: Request,
+): Promise<AccessOk | AccessErr> {
+  const session = await requireSession(request);
+  if (!session.ok) {
+    return session;
+  }
+
+  const admins = getAdminUserIds();
+  if (admins.size === 0) {
+    return {
+      ok: false,
+      status: 503,
+      error: "Admin usage API is not configured (ADMIN_USER_IDS).",
+    };
+  }
+
+  if (!admins.has(session.userId)) {
+    return { ok: false, status: 403, error: "Admin access required." };
+  }
+
+  return session;
+}
+
 export async function requireSession(request?: Request): Promise<AccessOk | AccessErr> {
   const user = await getSessionUser(request);
   if (!user) {

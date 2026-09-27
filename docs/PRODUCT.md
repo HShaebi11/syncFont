@@ -46,7 +46,7 @@ One product, one brand, one account. No separate “utility vs platform” split
 
 ## Pricing
 
-Subscription-first. Polar was considered early; **RevenueCat + Stripe** is the chosen billing stack (see below).
+Subscription-first. **Polar** is the web billing provider (Launch £20/yr, Pro later). Apple IAP remains optional for App Store distribution (see below). Historical note: RevenueCat + Stripe was considered earlier; implementation is Polar-only on web.
 
 ### Plans
 
@@ -133,27 +133,21 @@ Revenue scales with conversion; free users are cheap list-building if conversion
 
 ## Billing stack
 
-**RevenueCat + Stripe** — single dashboard for web and mobile subscriptions.
+**Polar (web)** + **Neon entitlements** + optional **Apple** notifications.
 
 | Layer | Tool | Role |
 |-------|------|------|
-| Reporting + entitlements | **RevenueCat** | MRR, subscribers, trials, churn; one customer record across platforms |
-| Web + Mac checkout | **Stripe** (via RevenueCat Web) | Checkout, invoices, payment methods |
-| iOS (when shipped) | **Apple IAP** (via RevenueCat SDK) | App Store compliance |
-| Backend | Neon + RevenueCat webhooks | Mirror `pro` entitlement; gate sync in API |
+| Checkout + renewals | **Polar** (`typefolio` org) | Hosted checkout, customer portal, subscriptions |
+| Entitlements | **Neon** (`subscriptions` + webhooks) | `GET /api/me` → `plan`, `features.sync`, launch flag |
+| Usage analytics | **Polar Meters** (tracking only) | Not usage-based billing; see `usage_hourly` + admin API |
+| iOS (when shipped) | **Apple IAP** + `POST /api/webhooks/apple` | Optional; dual-provider merge in entitlements |
 
-### Why not Polar / build-your-own
+Launch runbook: [`docs/LAUNCH_CHECKLIST.md`](LAUNCH_CHECKLIST.md), setup: [`POLAR_SETUP.md`](../POLAR_SETUP.md).
 
-- **Polar** — good MoR for web-only; no unified Apple IAP reporting.
-- **Stripe alone** — web reporting only; App Store Connect stays separate.
-- **Custom reporting** — not worth building pre-revenue.
+### Cost (web)
 
-### Cost
-
-- RevenueCat: free until **$2,500/mo** tracked revenue, then **1%**
-- Stripe: ~2.9% + 30p per web transaction
-- Apple IAP: 15–30% on in-app purchases
-- Tax: **Stripe Tax** for UK/VAT (not a full merchant-of-record like Polar)
+- Polar: platform fee per their pricing (merchant of record for VAT where applicable)
+- Apple IAP: 15–30% when selling through App Store
 
 ## App Store & payments (UK, web-first)
 
@@ -162,7 +156,7 @@ Developer is UK-based. Billing is **web-first** (like Cursor’s model, but Curs
 ### macOS
 
 - Distribute **outside the Mac App Store** (direct download).
-- Full web checkout via RevenueCat/Stripe; no Apple payment rules.
+- Full web checkout via Polar; no Apple payment rules.
 
 ### iPad / iOS
 
@@ -180,9 +174,9 @@ UK App Store rules (unlike US post-Epic):
 
 | Platform | Payment |
 |----------|---------|
-| Web | RevenueCat Web Purchase Link / Stripe checkout |
+| Web | Polar checkout (`/api/billing/checkout`) |
 | Mac (direct) | Link to `typefolio.app/pricing` |
-| iPad App Store (later) | RevenueCat IAP mirror **or** account unlock for web subscribers + neutral account link |
+| iPad App Store (later) | Apple IAP **or** account unlock for web subscribers + neutral account link |
 
 ## Hosting cost estimates (utility)
 
@@ -199,17 +193,17 @@ Plus: domain ~£10/yr; Apple Developer **£99/yr** if shipping on App Store.
 ## Implementation checklist
 
 - [ ] Buy `typefolio.app`
-- [ ] Stripe products/prices in Dashboard + env (`STRIPE_PRICE_*`)
-- [ ] Stripe webhook → `POST /api/webhooks/stripe` (see [`docs/BILLING-E2E.md`](BILLING-E2E.md))
+- [x] Polar catalog + env (`POLAR_PRODUCT_LAUNCH`, `npm run polar:catalog -- ensure`)
+- [ ] Polar webhook → `POST /api/webhook/polar` + `POLAR_WEBHOOK_SECRET` on Vercel (`npm run polar:webhook -- ensure`)
 - [ ] App Store Connect + `POST /api/webhooks/apple` with `appAccountToken` = user id
 - [x] Gate manifest sync on Pro (`SYNC_NOT_AVAILABLE`)
 - [x] Gate uploads on storage cap; devices on device cap
-- [ ] Pricing UI wired to `/api/billing/*`
+- [x] Pricing UI — marketing `/pricing` + in-app upgrade (`/api/billing/*`)
 - [ ] Mac/iPad: upgrade opens web checkout; iOS sets `appAccountToken` on IAP
 
 ## Related code
 
-Billing API: `src/app/api/billing/*`, webhooks: `src/app/api/webhooks/stripe|apple`, entitlements: `src/lib/entitlements.ts`. RevenueCat webhook returns 410.
+Billing API: `apps/app/src/app/api/billing/*`, Polar webhook: `apps/app/src/app/api/webhook/polar`, entitlements: `packages/core/src/lib/entitlements.ts`. Legacy RevenueCat webhook returns 410.
 
 ## Repo
 

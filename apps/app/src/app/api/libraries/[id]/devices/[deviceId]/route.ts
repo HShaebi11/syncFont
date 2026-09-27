@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 
 import { requireLibraryOwner } from "@typefolio/core/access";
 import { deleteDevice, updateDevice } from "@typefolio/core/devices";
+import { USAGE_EVENT } from "@typefolio/core/usage/events";
+import { recordUsage } from "@typefolio/core/usage/record";
 
 interface RouteContext {
   params: Promise<{ id: string; deviceId: string }>;
@@ -45,6 +47,10 @@ export async function PATCH(request: Request, context: RouteContext) {
 
   if (!result) {
     return NextResponse.json({ error: "Device not found" }, { status: 404 });
+  }
+
+  if (body.lastSyncAt !== undefined) {
+    recordUsage(access.userId, USAGE_EVENT.deviceSync);
   }
 
   return NextResponse.json(result);

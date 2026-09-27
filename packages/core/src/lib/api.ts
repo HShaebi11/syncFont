@@ -1,5 +1,7 @@
 import type {
   ActivityEvent,
+  BillingPlansResponse,
+  CheckoutPriceId,
   CollectionDetail,
   CollectionItemType,
   CollectionSummary,
@@ -383,6 +385,22 @@ export async function createShareLink(
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(input),
+    }),
+  );
+}
+
+export async function getBillingPlans(): Promise<BillingPlansResponse> {
+  return parseResponse(await request("/api/billing/plans"));
+}
+
+export async function startBillingCheckout(
+  priceId: CheckoutPriceId,
+): Promise<{ checkoutUrl: string }> {
+  return parseResponse(
+    await request("/api/billing/checkout", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ priceId }),
     }),
   );
 }

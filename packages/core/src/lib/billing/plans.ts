@@ -42,18 +42,50 @@ export function getPublicBillingPlans(): {
 } {
   const launchActive = isLaunchOfferActive();
 
+  const freePlan = {
+    id: "free" as const,
+    name: "Free",
+    priceGbp: 0,
+    interval: null as null,
+    storageLimitBytes: FREE_STORAGE_LIMIT_BYTES,
+    deviceLimit: FREE_DEVICE_LIMIT,
+    features: ["Upload fonts", "Web library", "1 device"],
+    highlight: false,
+  };
+
+  const launchPlan = {
+    id: "pro_launch" as const,
+    name: "Launch",
+    priceGbp: 20,
+    interval: "year" as const,
+    storageLimitBytes: PRO_STORAGE_LIMIT_BYTES,
+    deviceLimit: PRO_DEVICE_LIMIT,
+    features: [
+      "500 MB storage",
+      "Auto-sync",
+      "Hosting included",
+      "£20/year locked in",
+    ],
+    highlight: true,
+    badge: "Launch",
+    checkoutPriceId: "pro_launch" as const,
+    available: launchActive,
+  };
+
+  if (launchActive) {
+    return {
+      plans: [freePlan, launchPlan],
+      launchOffer: {
+        active: true,
+        message:
+          "Typefolio Launch — £20/year, all-inclusive (hosting & sync). Locked in while you stay subscribed.",
+      },
+    };
+  }
+
   return {
     plans: [
-      {
-        id: "free",
-        name: "Free",
-        priceGbp: 0,
-        interval: null,
-        storageLimitBytes: FREE_STORAGE_LIMIT_BYTES,
-        deviceLimit: FREE_DEVICE_LIMIT,
-        features: ["Upload fonts", "Web library", "1 device"],
-        highlight: false,
-      },
+      freePlan,
       {
         id: "pro_annual",
         name: "Pro",
@@ -64,19 +96,6 @@ export function getPublicBillingPlans(): {
         features: ["500 MB storage", "2 devices", "Auto-sync"],
         highlight: true,
         checkoutPriceId: "pro_annual",
-      },
-      {
-        id: "pro_launch",
-        name: "Pro Launch",
-        priceGbp: 20,
-        interval: "year",
-        storageLimitBytes: PRO_STORAGE_LIMIT_BYTES,
-        deviceLimit: PRO_DEVICE_LIMIT,
-        features: ["Same as Pro", "Launch pricing locked in"],
-        highlight: true,
-        badge: "50% off",
-        checkoutPriceId: "pro_launch",
-        available: launchActive,
       },
       {
         id: "pro_monthly",
@@ -91,8 +110,8 @@ export function getPublicBillingPlans(): {
       },
     ],
     launchOffer: {
-      active: launchActive,
-      message: "Launch pricing: £20/year — locked in for early users.",
+      active: false,
+      message: "",
     },
   };
 }

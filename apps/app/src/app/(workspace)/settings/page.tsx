@@ -4,7 +4,7 @@ import { useTheme } from "next-themes";
 import { useState } from "react";
 import { toast } from "sonner";
 
-import { openBillingPortal } from "@typefolio/core/api";
+import { openBillingPortal, startBillingCheckout } from "@typefolio/core/api";
 
 import { marketingDownloadsUrl } from "@/lib/marketing";
 import { SignOutButton } from "@/components/sign-out-button";
@@ -48,6 +48,9 @@ export default function SettingsPage() {
   const { theme, setTheme } = useTheme();
   const [autoSync, setAutoSync] = useState(true);
   const [mobileData, setMobileData] = useState(false);
+  const [checkoutLoading, setCheckoutLoading] = useState(false);
+
+  const showLaunchUpgrade = entitlement?.plan === "free";
 
   return (
     <div>
@@ -79,21 +82,48 @@ export default function SettingsPage() {
               />
               <SettingRow
                 title="Plan"
-                description={entitlement ? `${entitlement.plan} · ${entitlement.status}` : "Loading"}
+                description={
+                  entitlement
+                    ? `${entitlement.plan} · ${entitlement.status}${
+                        entitlement.isLaunchPricing ? " · Launch pricing" : ""
+                      }`
+                    : "Loading"
+                }
                 control={
-                  <Button
-                    variant="outline"
-                    onClick={async () => {
-                      try {
-                        const result = await openBillingPortal();
-                        window.location.href = result.portalUrl;
-                      } catch {
-                        toast.error("Billing portal unavailable.");
-                      }
-                    }}
-                  >
-                    Manage
-                  </Button>
+                  <div className="flex flex-wrap justify-end gap-2">
+                    {showLaunchUpgrade ? (
+                      <Button
+                        disabled={checkoutLoading}
+                        onClick={async () => {
+                          setCheckoutLoading(true);
+                          try {
+                            const result = await startBillingCheckout("pro_launch");
+                            window.location.href = result.checkoutUrl;
+                          } catch (error) {
+                            const message =
+                              error instanceof Error ? error.message : "Checkout failed.";
+                            toast.error(message);
+                            setCheckoutLoading(false);
+                          }
+                        }}
+                      >
+                        {checkoutLoading ? "Redirecting…" : "Upgrade to Launch — £20/yr"}
+                      </Button>
+                    ) : null}
+                    <Button
+                      variant="outline"
+                      onClick={async () => {
+                        try {
+                          const result = await openBillingPortal();
+                          window.location.href = result.portalUrl;
+                        } catch {
+                          toast.error("Billing portal unavailable.");
+                        }
+                      }}
+                    >
+                      Manage billing
+                    </Button>
+                  </div>
                 }
               />
               <SettingRow

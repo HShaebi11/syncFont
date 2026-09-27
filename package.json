@@ -27,6 +27,10 @@
     "typecheck": "turbo run typecheck",
     "db:push": "dotenv -e .env.local -- npm run db:push -w @typefolio/core",
     "check:env": "dotenv -e .env.local -- tsx scripts/check-env.ts",
+    "polar:catalog": "dotenv -e .env.local -- tsx scripts/polar-catalog.ts",
+    "polar:meters": "dotenv -e .env.local -- tsx scripts/polar-meters.ts",
+    "polar:webhook": "dotenv -e .env.local -- tsx scripts/polar-webhook.ts",
+    "launch:audit": "dotenv -e .env.local -- tsx scripts/launch-audit.ts",
     "vercel:env:sync": "dotenv -e .env.local -- bash scripts/sync-typefolio-vercel-env.sh",
     "smoke": "bash scripts/smoke-test.sh",
     "test": "npm run test -w @typefolio/core"

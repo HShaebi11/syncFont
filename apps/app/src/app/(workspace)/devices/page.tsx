@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { MonitorIcon, SmartphoneIcon, TabletIcon } from "lucide-react";
 
+import { UpgradeLaunchBanner } from "@/components/billing/upgrade-launch-banner";
 import { marketingDownloadsUrl } from "@/lib/marketing";
 import { useLibrary } from "@/components/library/library-provider";
 import { Badge } from "@/components/ui/badge";
@@ -40,6 +41,7 @@ export default function DevicesPage() {
         meta={formatCount(devices.length, "device")}
         description="Where Typefolio is installed and synchronised."
       />
+      <UpgradeLaunchBanner />
       {devices.length === 0 ? (
         <EmptyState
           title="No devices yet"

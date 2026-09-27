@@ -33,7 +33,7 @@ add_sensitive() {
     echo "skip ${project} ${key} (empty)"
     return 0
   fi
-  for env in "${TARGETS[@]}"; do
+  for env in production preview; do
     vercel env add "$key" "$env" \
       --project "$project" \
       --scope "$SCOPE" \
@@ -43,6 +43,14 @@ add_sensitive() {
       --yes \
       >/dev/null
   done
+  # Vercel rejects --sensitive on the Development environment.
+  vercel env add "$key" development \
+    --project "$project" \
+    --scope "$SCOPE" \
+    --value "$value" \
+    --force \
+    --yes \
+    >/dev/null
   echo "ok ${project} ${key} (sensitive)"
 }
 
@@ -79,6 +87,9 @@ add_plain typefolio-app POLAR_PRODUCT_ANNUAL "${POLAR_PRODUCT_ANNUAL:-}"
 add_plain typefolio-app POLAR_PRODUCT_LAUNCH "${POLAR_PRODUCT_LAUNCH:-}"
 add_plain typefolio-app POLAR_PRODUCT_MONTHLY "${POLAR_PRODUCT_MONTHLY:-}"
 add_plain typefolio-app LAUNCH_OFFER_ACTIVE "${LAUNCH_OFFER_ACTIVE:-true}"
+add_plain typefolio-app POLAR_USAGE_EVENTS "${POLAR_USAGE_EVENTS:-true}"
+add_plain typefolio-app ADMIN_USER_IDS "${ADMIN_USER_IDS:-}"
+add_plain typefolio-app INFRA_PLATFORM_FIXED_GBP_MONTHLY "${INFRA_PLATFORM_FIXED_GBP_MONTHLY:-35}"
 add_plain typefolio-app GOOGLE_CLIENT_ID "${GOOGLE_CLIENT_ID:-}"
 add_sensitive typefolio-app GOOGLE_CLIENT_SECRET "${GOOGLE_CLIENT_SECRET:-}"
 

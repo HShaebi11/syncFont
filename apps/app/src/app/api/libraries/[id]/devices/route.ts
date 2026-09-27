@@ -2,6 +2,8 @@ import { NextResponse } from "next/server";
 
 import { requireLibraryOwner } from "@typefolio/core/access";
 import { listDevices, registerDevice } from "@typefolio/core/devices";
+import { USAGE_EVENT } from "@typefolio/core/usage/events";
+import { recordUsage } from "@typefolio/core/usage/record";
 import type { DevicePlatform } from "@typefolio/core/types";
 
 interface RouteContext {
@@ -64,6 +66,10 @@ export async function POST(request: Request, context: RouteContext) {
       { error: result.error, code: result.code, details: result.details },
       { status: result.status },
     );
+  }
+
+  if (result.created) {
+    recordUsage(access.userId, USAGE_EVENT.deviceRegister);
   }
 
   return NextResponse.json(

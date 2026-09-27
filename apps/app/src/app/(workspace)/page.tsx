@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 
+import { UpgradeLaunchBanner } from "@/components/billing/upgrade-launch-banner";
 import { CollectionCard } from "@/components/collections/collection-card";
 import { FontCard } from "@/components/fonts/font-card";
 import { useLibrary } from "@/components/library/library-provider";
@@ -34,6 +35,7 @@ export default function HomePage() {
 
   return (
     <div className="space-y-8">
+      <UpgradeLaunchBanner />
       <div className="space-y-2">
         <p className="text-sm text-muted-foreground">{hello}</p>
         <h1 className="text-2xl font-semibold tracking-tight">Your type library</h1>

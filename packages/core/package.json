@@ -7,7 +7,7 @@
     "typecheck": "tsc --noEmit",
     "email:dev": "email dev --dir src/emails --port 43126",
     "db:push": "drizzle-kit push",
-    "test": "node --import tsx --test src/lib/entitlements.test.ts src/lib/billing/polar-webhook.test.ts src/lib/billing/apple-webhook.test.ts src/lib/desktop-auth.test.ts src/lib/font-families.test.ts src/lib/font-metadata.test.ts"
+    "test": "node --import tsx --test src/lib/entitlements.test.ts src/lib/billing/plans.test.ts src/lib/billing/polar-webhook.test.ts src/lib/billing/apple-webhook.test.ts src/lib/desktop-auth.test.ts src/lib/font-families.test.ts src/lib/font-metadata.test.ts"
   },
   "dependencies": {
     "@apple/app-store-server-library": "^3.1.0",
