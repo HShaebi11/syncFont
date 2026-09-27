@@ -1,6 +1,4 @@
 import {
-  FREE_DEVICE_LIMIT,
-  FREE_STORAGE_LIMIT_BYTES,
   isLaunchOfferActive,
   PRO_DEVICE_LIMIT,
   PRO_STORAGE_LIMIT_BYTES,
@@ -27,7 +25,7 @@ export function isCheckoutPriceId(value: unknown): value is CheckoutPriceId {
 
 export function getPublicBillingPlans(): {
   plans: Array<{
-    id: CheckoutPriceId | "free";
+    id: CheckoutPriceId;
     name: string;
     priceGbp: number;
     interval: "year" | "month" | null;
@@ -77,16 +75,6 @@ export function getPublicBillingPlans(): {
 
   return {
     plans: [
-      {
-        id: "free" as const,
-        name: "Free",
-        priceGbp: 0,
-        interval: null as null,
-        storageLimitBytes: FREE_STORAGE_LIMIT_BYTES,
-        deviceLimit: FREE_DEVICE_LIMIT,
-        features: ["Upload fonts", "Web library", "1 device"],
-        highlight: false,
-      },
       {
         id: "pro_annual",
         name: "Pro",

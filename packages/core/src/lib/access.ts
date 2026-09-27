@@ -187,7 +187,7 @@ export async function requireSyncEntitlement(
       ok: false,
       status: 403,
       error:
-        "Pro sync is required to use the native sync feature. Upgrade at typefolio.app/pricing.",
+        "Pro sync is required to use the native sync feature. Upgrade in the web app settings.",
       code: "SYNC_NOT_AVAILABLE",
     };
   }

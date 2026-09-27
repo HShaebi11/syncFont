@@ -32,7 +32,7 @@ describe("getPublicBillingPlans", () => {
     const { plans, launchOffer } = getPublicBillingPlans();
 
     assert.equal(launchOffer.active, false);
-    assert.deepEqual(plans.map((p) => p.id), ["free", "pro_annual", "pro_monthly"]);
+    assert.deepEqual(plans.map((p) => p.id), ["pro_annual", "pro_monthly"]);
     assert.equal(plans.some((p) => p.id === "pro_launch"), false);
   });
 });
