@@ -17,7 +17,11 @@ import {
   authUser,
   authVerification,
 } from "@typefolio/core/db/schema-auth";
-import { sendAuthEmail } from "@typefolio/core/email";
+import {
+  sendResetPasswordEmail,
+  sendVerifyEmail,
+  sendWelcomeThanksEmail,
+} from "@typefolio/core/send-emails";
 import { deleteAllUserData } from "@typefolio/core/user-data";
 import { ensureSubscriptionRow } from "@typefolio/core/entitlements";
 import { getOrCreateUserLibrary } from "@typefolio/core/storage";
@@ -54,22 +58,17 @@ export const auth = betterAuth({
     enabled: true,
     requireEmailVerification: true,
     sendResetPassword: async ({ user, url }) => {
-      await sendAuthEmail({
-        to: user.email,
-        subject: "Reset your Typefolio password",
-        text: `Reset your password:\n\n${url}\n\nIf you did not request this, you can ignore this email.`,
-      });
+      await sendResetPasswordEmail({ to: user.email, resetUrl: url });
     },
   },
   emailVerification: {
     sendOnSignUp: true,
     autoSignInAfterVerification: true,
     sendVerificationEmail: async ({ user, url }) => {
-      await sendAuthEmail({
-        to: user.email,
-        subject: "Verify your Typefolio email",
-        text: `Verify your email to upload and sync fonts:\n\n${url}\n\nIf you did not create a Typefolio account, you can ignore this message.`,
-      });
+      await sendVerifyEmail({ to: user.email, verifyUrl: url });
+    },
+    afterEmailVerification: async (user) => {
+      await sendWelcomeThanksEmail({ to: user.email, name: user.name });
     },
   },
   socialProviders:
@@ -87,6 +86,9 @@ export const auth = betterAuth({
         after: async (user) => {
           await ensureSubscriptionRow(user.id);
           await getOrCreateUserLibrary(user.id);
+          if (user.emailVerified) {
+            await sendWelcomeThanksEmail({ to: user.email, name: user.name });
+          }
         },
       },
     },

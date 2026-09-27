@@ -24,6 +24,7 @@ import { OfflineBanner } from "@/components/ui/feedback";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { relativeTime } from "@/lib/format";
+import { marketingDownloadsUrl } from "@/lib/marketing";
 
 const HEADER_LINKS = [
   { href: "/fonts", label: "Fonts", match: (pathname: string) => pathname === "/fonts" || pathname.startsWith("/fonts/") },
@@ -185,6 +186,13 @@ function ShellInner({ children }: { children: React.ReactNode }) {
             <DropdownMenuContent align="end">
               <DropdownMenuLabel>Account</DropdownMenuLabel>
               <DropdownMenuSeparator />
+              <DropdownMenuItem
+                onClick={() =>
+                  window.open(marketingDownloadsUrl(), "_blank", "noopener,noreferrer")
+                }
+              >
+                Download desktop app
+              </DropdownMenuItem>
               <DropdownMenuItem onClick={() => router.push("/settings")}>
                 Settings
               </DropdownMenuItem>

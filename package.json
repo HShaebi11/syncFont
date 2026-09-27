@@ -5,6 +5,7 @@
   "workspaces": [
     "apps/app",
     "apps/marketing",
+    "apps/typefolio-desktop",
     "packages/core"
   ],
   "scripts": {
@@ -12,7 +13,14 @@
     "dev:api": "npm run dev:app",
     "dev:app": "npm run dev -w @typefolio/app",
     "dev:marketing": "npm run dev -w @typefolio/marketing",
+    "dev:desktop": "npm run dev -w typefolio-desktop",
     "dev:native": "bash scripts/dev-all.sh",
+    "dist:desktop": "npm run dist -w typefolio-desktop",
+    "dist:desktop:mac": "npm run dist:mac -w typefolio-desktop",
+    "dist:desktop:win": "npm run dist:win -w typefolio-desktop",
+    "dist:desktop:linux": "npm run dist:linux -w typefolio-desktop",
+    "upload:desktop:blob": "dotenv -e apps/marketing/.env.upload -- node scripts/upload-desktop-releases.mjs",
+    "upload:desktop:blob:marketing": "npm run upload:desktop:blob",
     "build": "turbo run build",
     "start": "npm run start -w @typefolio/app",
     "lint": "turbo run lint",
