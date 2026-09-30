@@ -5,6 +5,7 @@
   "workspaces": [
     "apps/app",
     "apps/marketing",
+    "apps/toolshelf-marketing",
     "apps/typefolio-desktop",
     "packages/core"
   ],
@@ -13,6 +14,7 @@
     "dev:api": "npm run dev:app",
     "dev:app": "npm run dev -w @typefolio/app",
     "dev:marketing": "npm run dev -w @typefolio/marketing",
+    "dev:toolshelf": "npm run dev -w @toolshelf/marketing",
     "dev:desktop": "npm run dev -w typefolio-desktop",
     "dev:native": "bash scripts/dev-all.sh",
     "dist:desktop": "npm run dist -w typefolio-desktop",
